@@ -30,6 +30,7 @@ public class Server implements BulletinBoardIntf {
         maxLengthMessage = 160;
         nameOfService = "BulletinBoard";
         newestMessagePointer = 0;
+        messages = new Message[maxNumMessages];
     }
 
     /**
