@@ -4,15 +4,15 @@ import java.time.Instant;
 
 public class Message {
 
-    private final String msg;
+    private final String message;
     private final Instant created;
 
     /**
      *
      * @param msg
      */
-    public Message(String msg) {
-        this.msg = msg;
+    public Message(String message) {
+        this.message = message;
         this.created = Instant.now();
     }
 
@@ -20,8 +20,8 @@ public class Message {
      *
      * @return
      */
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
     /**
@@ -30,5 +30,17 @@ public class Message {
      */
     public Instant getCreated() {
         return created;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "Message{" +
+                "message='" + message + '\'' +
+                ", created=" + created +
+                '}';
     }
 }
