@@ -20,6 +20,9 @@ public class Server implements BulletinBoardIntf {
     private static Message[] messages;
     private int newestMessagePointer;
 
+    /**
+     *
+     */
     private Server() {
         super();
         maxNumMessages = 20;
@@ -29,6 +32,10 @@ public class Server implements BulletinBoardIntf {
         newestMessagePointer = 0;
     }
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
@@ -45,11 +52,22 @@ public class Server implements BulletinBoardIntf {
         }
     }
 
+    /**
+     *
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public int getMessageCount() throws RemoteException {
+
         return 0;
     }
 
+    /**
+     *
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public String[] getMessages() throws RemoteException {
         ArrayList<String> temp = new ArrayList<>();
@@ -73,11 +91,22 @@ public class Server implements BulletinBoardIntf {
         return output;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     * @throws RemoteException
+     */
     @Override
     public String getMessage(int index) throws RemoteException {
         return null;
     }
 
+    /**
+     *
+     * @param msg
+     * @throws RemoteException
+     */
     @Override
     public void putMessage(String msg) throws RemoteException {
         int free = freeSlot();
@@ -92,6 +121,10 @@ public class Server implements BulletinBoardIntf {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     private int freeSlot() {
         int free = (newestMessagePointer + 1) % maxNumMessages;
         if (messages[free] == null) {
