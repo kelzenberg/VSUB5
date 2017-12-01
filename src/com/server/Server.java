@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class Server implements BulletinBoardIntf {
 
     private static int maxNumMessages;
-    private static int messageLifetime;
+    private static int messageLifetime; // TODO: messageLifeTime implementation somewhere...
     private static int maxLengthMessage;
     private static String nameOfService;
     private static Message[] messages;
@@ -105,6 +105,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public String getMessage(int index) throws RemoteException {
+        // TODO: check if index exists
         return messages[index].getMessage();
     }
 
@@ -116,11 +117,16 @@ public class Server implements BulletinBoardIntf {
     @Override
     public void putMessage(String message) throws RemoteException {
         int free = freeSlot();
-        if (message.trim().isEmpty()) {
+        String trimmed = message.trim();
+        if (trimmed.isEmpty()) {
             throw new InvalidMessageException("Provided Message is empty. Please send us Content.");
         }
+        if (trimmed.length() > maxLengthMessage){
+            throw new InvalidMessageException("Provided Message is too long. Please restrict yourself to "
+                    + maxLengthMessage + " Characters.");
+        }
         if (free != -1) {
-            messages[free] = new Message(message.trim());
+            messages[free] = new Message(trimmed);
             newestMessagePointer = free;
         } else {
             throw new BulletinBoardFullException();
