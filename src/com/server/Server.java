@@ -9,10 +9,10 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class Server implements BulletinBoardIntf {
 
-    private final int maxNumMessages;
-    private final int messageLifetime;
-    private final int maxLengthMessage;
-    private final String nameOfService;
+    private static int maxNumMessages;
+    private static int messageLifetime;
+    private static int maxLengthMessage;
+    private static String nameOfService;
 
     private Server() {
         super();
@@ -28,9 +28,9 @@ public class Server implements BulletinBoardIntf {
         }
         try {
             Server engine = new Server();
-            BulletinBoardIntf stub = (BulletinBoardIntf) UnicastRemoteObject.exportObject(engine, 0);
+            BulletinBoardIntf bb = (BulletinBoardIntf) UnicastRemoteObject.exportObject(engine, 0);
             Registry registry = LocateRegistry.getRegistry();
-            registry.rebind(nameOfService, stub);
+            registry.rebind(nameOfService, bb);
             System.out.println("BulletinBoard bound");
         } catch (Exception e) {
             System.err.println("BulletinBoard exception:");
