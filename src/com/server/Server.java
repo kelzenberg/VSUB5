@@ -82,7 +82,7 @@ public class Server implements BulletinBoardIntf {
             if (messages[index] == null) {
                 break;
             }
-            temp.add(messages[index].toString());
+            temp.add(messages[index].getMessage());
             index--;
 
             if (index == -1) {
@@ -105,7 +105,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public String getMessage(int index) throws RemoteException {
-        return messages[index].getMsg();
+        return messages[index].getMessage();
     }
 
     /**

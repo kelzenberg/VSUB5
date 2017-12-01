@@ -2,6 +2,7 @@ package com.client;
 
 import com.BulletinBoardIntf;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Arrays;
@@ -21,14 +22,31 @@ public class Client {
             //BigDecimal pi = comp.executeTask(task);
             int test = bb.getMessageCount();
             System.out.println("All Messages: " + test);
-            bb.putMessage("Eine tolle Nachricht!");
+            try {
+                bb.putMessage("Eine tolle Nachricht!");
+            } catch(RemoteException error) {
+                System.out.println(error);
+            }
             test = bb.getMessageCount();
             System.out.println("All Messages: " + test);
-            String[] mes = bb.getMessages();
-            System.out.println(Arrays.toString(mes));
+            printAllMessages(bb);
         } catch (Exception e) {
             System.err.println("ComputePi exception:");
             e.printStackTrace();
         }
+    }
+    
+    private static void printAllMessages(BulletinBoardIntf bb) {
+        String[] messages;
+        try {
+            messages = bb.getMessages();
+        } catch(RemoteException error ) {
+            return;
+        }
+        System.out.println("Messages begin ===");
+        for(String message : messages) {
+            System.out.println(message.toString());
+        }
+        System.out.println("Messages end   ===");
     }
 }
