@@ -1,4 +1,4 @@
-package com.server;
+package com.client;
 
 public class Client {
 
