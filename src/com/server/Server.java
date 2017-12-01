@@ -105,7 +105,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public String getMessage(int index) throws RemoteException {
-        return null;
+        return messages[index].getMsg();
     }
 
     /**
