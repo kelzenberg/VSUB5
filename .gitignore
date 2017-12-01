@@ -28,3 +28,4 @@ UserInterfaceState.xcuserstate
 config.xml.bak
 .sourcemaps
 *.class
+out/
