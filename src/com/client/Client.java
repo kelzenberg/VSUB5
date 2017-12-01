@@ -1,11 +1,12 @@
 package com.client;
 
 import com.BulletinBoardIntf;
+
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class Client {
-    
+
     public static void main(String args[]) {
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new SecurityManager());
@@ -23,5 +24,5 @@ public class Client {
             System.err.println("ComputePi exception:");
             e.printStackTrace();
         }
-    } 
+    }
 }

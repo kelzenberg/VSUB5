@@ -1,11 +1,15 @@
 package com.server;
 
+import com.BulletinBoardFullException;
 import com.BulletinBoardIntf;
+import com.InvalidMessageException;
+import com.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class Server implements BulletinBoardIntf {
 
@@ -13,6 +17,8 @@ public class Server implements BulletinBoardIntf {
     private static int messageLifetime;
     private static int maxLengthMessage;
     private static String nameOfService;
+    private static Message[] messages;
+    private int newestMessagePointer;
 
     private Server() {
         super();
@@ -20,6 +26,7 @@ public class Server implements BulletinBoardIntf {
         messageLifetime = 600;
         maxLengthMessage = 160;
         nameOfService = "BulletinBoard";
+        newestMessagePointer = 0;
     }
 
     public static void main(String[] args) {
@@ -45,7 +52,25 @@ public class Server implements BulletinBoardIntf {
 
     @Override
     public String[] getMessages() throws RemoteException {
-        return new String[0];
+        ArrayList<String> temp = new ArrayList<>();
+        int index = newestMessagePointer;
+        while (true) {
+            if (messages[index] == null) {
+                break;
+            }
+            temp.add(messages[index].toString());
+            index--;
+
+            if (index == -1) {
+                index = maxNumMessages - 1;
+            }
+            if (index == newestMessagePointer) {
+                break;
+            }
+        }
+        String[] output = new String[temp.size()];
+        output = temp.toArray(output);
+        return output;
     }
 
     @Override
@@ -55,6 +80,23 @@ public class Server implements BulletinBoardIntf {
 
     @Override
     public void putMessage(String msg) throws RemoteException {
+        int free = freeSlot();
+        if (msg.trim().isEmpty()) {
+            throw new InvalidMessageException("Provided Message is empty. Please send us Content.");
+        }
+        if (free != -1) {
+            messages[free] = new Message(msg.trim());
+            newestMessagePointer = free;
+        } else {
+            throw new BulletinBoardFullException();
+        }
+    }
 
+    private int freeSlot() {
+        int free = (newestMessagePointer + 1) % maxNumMessages;
+        if (messages[free] == null) {
+            return free;
+        }
+        return -1;
     }
 }
