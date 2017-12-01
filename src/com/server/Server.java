@@ -60,8 +60,13 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public int getMessageCount() throws RemoteException {
-
-        return 0;
+        int count = 0;
+        for (Message message : messages){
+            if (message != null){
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
