@@ -110,17 +110,17 @@ public class Server implements BulletinBoardIntf {
 
     /**
      *
-     * @param msg
+     * @param message
      * @throws RemoteException
      */
     @Override
-    public void putMessage(String msg) throws RemoteException {
+    public void putMessage(String message) throws RemoteException {
         int free = freeSlot();
-        if (msg.trim().isEmpty()) {
+        if (message.trim().isEmpty()) {
             throw new InvalidMessageException("Provided Message is empty. Please send us Content.");
         }
         if (free != -1) {
-            messages[free] = new Message(msg.trim());
+            messages[free] = new Message(message.trim());
             newestMessagePointer = free;
         } else {
             throw new BulletinBoardFullException();
