@@ -9,12 +9,14 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class Server implements BulletinBoardIntf {
 
     private static int maxNumMessages;
-    private static int messageLifetime; // TODO: messageLifeTime implementation somewhere...
+    private static int maxMessageLifeTime;
     private static int maxLengthMessage;
     private static String nameOfService;
     private static Message[] messages;
@@ -26,7 +28,7 @@ public class Server implements BulletinBoardIntf {
     private Server() {
         super();
         maxNumMessages = 20;
-        messageLifetime = 600;
+        maxMessageLifeTime = 600;
         maxLengthMessage = 160;
         nameOfService = "BulletinBoard";
         newestMessagePointer = 0;
@@ -57,6 +59,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public int getMessageCount() throws RemoteException {
+        deleteOldMessages();
         int count = 0;
         for (Message message : messages){
             if (message != null){
@@ -73,6 +76,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public String[] getMessages() throws RemoteException {
+        deleteOldMessages();
         ArrayList<String> temp = new ArrayList<>();
         int index = newestMessagePointer;
         while (true) {
@@ -102,6 +106,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public String getMessage(int index) throws RemoteException {
+        deleteOldMessages();
         // TODO: check if index exists
         return messages[index].getMessage();
     }
@@ -113,6 +118,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public void putMessage(String message) throws RemoteException {
+        deleteOldMessages();
         int free = freeSlot();
         String trimmed = message.trim();
         if (trimmed.isEmpty()) {
@@ -140,5 +146,15 @@ public class Server implements BulletinBoardIntf {
             return free;
         }
         return -1;
+    }
+
+    private void deleteOldMessages() {
+        for (int i = 0; i < messages.length; i++) {
+            Message message = messages[i];
+            Duration messageLifeTime = Duration.between(message.getCreated(), Instant.now());
+            if (messageLifeTime.toMillis() / 1000 > maxMessageLifeTime) {
+                messages[i] = null;
+            }
+        }
     }
 }
