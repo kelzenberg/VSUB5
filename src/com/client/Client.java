@@ -165,6 +165,7 @@ public class Client {
             System.out.println("End of readline stream reached. Exiting.");
             System.exit(0);
          }
+         return null;
       } catch (IOException e) {
          System.out.println("An error occoured while reading console input. Extiting.");
          System.out.println(e);
