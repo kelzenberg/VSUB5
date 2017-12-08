@@ -59,7 +59,7 @@ public class Server implements BulletinBoardIntf {
     * @throws RemoteException
     */
    @Override
-   public int getMessageCount() throws RemoteException {
+   public int getMessageCount() throws Exception {
       deleteOldMessages();
       int count = 0;
       for (Message message : messages) {
@@ -77,7 +77,7 @@ public class Server implements BulletinBoardIntf {
     * @throws RemoteException
     */
    @Override
-   public String[] getMessages() throws RemoteException {
+   public String[] getMessages() throws Exception {
       deleteOldMessages();
       ArrayList<String> temp = new ArrayList<>();
       int index = newestMessagePointer;
@@ -85,7 +85,7 @@ public class Server implements BulletinBoardIntf {
          if (messages[index] == null) {
             break;
          }
-         temp.add(messages[index].getMessage());
+         temp.add("MSG" + index + ": " + messages[index].getMessage());
          index--;
 
          if (index == -1) {
@@ -108,7 +108,7 @@ public class Server implements BulletinBoardIntf {
     * @throws RemoteException
     */
    @Override
-   public String getMessage(int index) throws RemoteException {
+   public String getMessage(int index) throws Exception {
       deleteOldMessages();
       if (messages[index] == null) {
          throw new MessageNotFoundException("The BulletinBoard contains no Message with this index.");
@@ -124,7 +124,7 @@ public class Server implements BulletinBoardIntf {
     * @throws RemoteException
     */
    @Override
-   public void putMessage(String message) throws RemoteException {
+   public void putMessage(String message) throws Exception {
       deleteOldMessages();
       int free = freeSlot();
       String trimmed = message.trim();

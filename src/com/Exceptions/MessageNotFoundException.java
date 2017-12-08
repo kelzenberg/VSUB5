@@ -2,7 +2,7 @@ package com.Exceptions;
 
 import java.rmi.RemoteException;
 
-public class MessageNotFoundException extends RemoteException {
+public class MessageNotFoundException extends Exception {
 
    private String error;
 

@@ -2,7 +2,7 @@ package com.Exceptions;
 
 import java.rmi.RemoteException;
 
-public class BulletinBoardFullException extends RemoteException {
+public class BulletinBoardFullException extends Exception {
 
    /**
     * Declares a full BulletinBoard

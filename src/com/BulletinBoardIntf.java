@@ -11,7 +11,7 @@ public interface BulletinBoardIntf extends Remote {
     * @return int number of pinned messages
     * @throws RemoteException
     */
-   int getMessageCount() throws RemoteException;
+   int getMessageCount() throws Exception;
 
    /**
     * Gets all Messages on the BulletinBoard as an Array
@@ -19,7 +19,7 @@ public interface BulletinBoardIntf extends Remote {
     * @return String-Array with one Message object per slot
     * @throws RemoteException
     */
-   String[] getMessages() throws RemoteException;
+   String[] getMessages() throws Exception;
 
    /**
     * Gets a specific Message at the provided index of the Array
@@ -28,7 +28,7 @@ public interface BulletinBoardIntf extends Remote {
     * @return String of the Message object at index
     * @throws RemoteException
     */
-   String getMessage(int index) throws RemoteException;
+   String getMessage(int index) throws Exception;
 
    /**
     * Creates a new Message object with input message
@@ -37,5 +37,5 @@ public interface BulletinBoardIntf extends Remote {
     * @param msg
     * @throws RemoteException
     */
-   void putMessage(String msg) throws RemoteException;
+   void putMessage(String msg) throws Exception;
 }

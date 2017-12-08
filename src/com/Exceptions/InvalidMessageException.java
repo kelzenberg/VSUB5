@@ -2,7 +2,7 @@ package com.Exceptions;
 
 import java.rmi.RemoteException;
 
-public class InvalidMessageException extends RemoteException {
+public class InvalidMessageException extends Exception {
 
    private String error;
 

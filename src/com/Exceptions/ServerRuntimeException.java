@@ -2,7 +2,7 @@ package com.Exceptions;
 
 import java.rmi.RemoteException;
 
-public class ServerRuntimeException extends RemoteException {
+public class ServerRuntimeException extends Exception {
 
    /**
     * Declares an exception on the server side

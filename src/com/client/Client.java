@@ -3,6 +3,7 @@ package com.client;
 import com.BulletinBoardIntf;
 
 import java.rmi.RemoteException;
+import java.rmi.ConnectException;
 
 import com.Exceptions.*;
 
@@ -28,6 +29,9 @@ public class Client {
             Registry registry = LocateRegistry.getRegistry("localhost");
             bb = (BulletinBoardIntf) registry.lookup(name);
             runCLI();
+        } catch (ConnectException e) {
+            System.out.println("Unable to connect to server.");
+            System.out.println(e);
         } catch (Exception e) {
             System.err.println("Critical server side error:");
             e.printStackTrace();
@@ -79,7 +83,7 @@ public class Client {
         switch (userInput[0]) {
             case "help": // prints help information
                 System.out.println("Choose a command: ");
-                System.out.println("help | post [message] | count | read | read [index]");
+                System.out.println("help | post [message] | count | read | read [indices] | exit");
             break;
             case "post": // posts a message
                 if (userInput.length > 1) { // The user wrote the message directly after the post command
@@ -99,10 +103,43 @@ public class Client {
                 printMessageCount();
             break;
             case "read": // returns all messages on the BulletinBoard
-                printAllMessages();
+                if(userInput.length == 1){
+                    printAllMessages();
+                } else {
+                    int index;
+                    for(int i = 1;i < userInput.length;i++) {
+                        try {
+                            index = Integer.parseInt(userInput[i]);
+                        } catch(NumberFormatException e) {
+                            System.out.println(userInput[i] + " is not a number");
+                            continue;
+                        }
+                        printMessage(index);
+                    }
+                }
+                
+            break;
+            case "exit":
+                System.exit(0);
             break;
             default:
                 System.out.println("Unknown command. Type 'help' for a list of  all commands.");
+        }
+    }
+    
+    private static void printMessage(int index) {
+        try {
+            String messages = bb.getMessage(index);
+            System.out.println("=> Message " + index + ": ");
+            System.out.println(messages);
+        } catch(MessageNotFoundException e) {
+            System.out.println("There is no message with the index " + index);
+        } catch(RemoteException e) {
+            if(e instanceof MessageNotFoundException) {
+                System.out.println("ROLLMOEPSE!");
+            }
+            System.out.println("The server encountered an unexpected error:");
+            System.out.println(e);
         }
     }
     
@@ -124,8 +161,8 @@ public class Client {
             } else {
                 System.out.println("There are " + messages.length + " messages on the bulletinboard:");
             }
-            for(int i = 0,c = 1;i < messages.length;i++,c++) {
-                System.out.println("=> Message "+ c +":");
+            for(int i = 0;i < messages.length;i++) {
+                System.out.println("=> Message:");
                 System.out.println(messages[i]);
             }
         } catch(RemoteException e) {
@@ -168,6 +205,7 @@ public class Client {
     private static void buildAndPostMessage(String message) {
         try {
             bb.putMessage(message);
+            System.out.println("Message posted!");
         } catch (InvalidMessageException e) {
             System.out.println("The server responded with an InvalidMessageException:");
             System.out.println(e);
