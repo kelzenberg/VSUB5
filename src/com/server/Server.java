@@ -2,6 +2,9 @@ package com.server;
 
 import com.*;
 import com.BulletinBoardIntf;
+import com.Exceptions.BulletinBoardFullException;
+import com.Exceptions.InvalidMessageException;
+import com.Exceptions.MessageNotFoundException;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

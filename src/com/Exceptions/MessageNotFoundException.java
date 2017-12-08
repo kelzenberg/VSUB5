@@ -1,4 +1,4 @@
-package com;
+package com.Exceptions;
 
 import java.rmi.RemoteException;
 
