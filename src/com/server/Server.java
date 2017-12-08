@@ -165,6 +165,7 @@ public class Server implements BulletinBoardIntf {
    private void deleteOldMessages() {
       for (int i = 0; i < messages.length; i++) {
          Message message = messages[i];
+         if (message == null) continue;
          Duration messageLifeTime = Duration.between(message.getCreated(), Instant.now());
          if (messageLifeTime.toMillis() / 1000 > maxMessageLifeTime) {
             messages[i] = null;

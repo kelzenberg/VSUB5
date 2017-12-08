@@ -17,7 +17,7 @@ public class Client {
    static BulletinBoardIntf bb;
 
    /**
-    * a
+    * Runs the Client
     *
     * @param args
     */
@@ -48,9 +48,9 @@ public class Client {
    }
 
    /**
-    * a
+    * Prints all the Messages of the BulletinBoard to the Console
     *
-    * @param bb
+    * @param bb BulletinBoard
     */
    private static void printAllMessages(BulletinBoardIntf bb) {
       String[] messages;
@@ -67,7 +67,7 @@ public class Client {
    }
 
    /**
-    * a
+    * Runs the Command Line Interface that parses User inputs
     */
    private static void runCLI() {
       BufferedReader clReader = new BufferedReader(new InputStreamReader(System.in));
@@ -87,10 +87,10 @@ public class Client {
    }
 
    /**
-    * a
+    * Validates the User Input if evaluable
     *
-    * @param rawInput
-    * @return
+    * @param rawInput as user input
+    * @return String Array with command and user input
     */
    private static String[] validateUserInput(String rawInput) {
       rawInput = rawInput.trim();
@@ -102,9 +102,9 @@ public class Client {
    }
 
    /**
-    * a
+    * Parses the User input according to the wanted command
     *
-    * @param userInput
+    * @param userInput String Array
     */
    private static void parseUserInput(String[] userInput) {
       switch (userInput[0]) {
@@ -142,7 +142,7 @@ public class Client {
     }
 
    /**
-    * a
+    * Builds the Message from the User input and sends it to the Server
     *
     * @param wordList
     */
@@ -163,10 +163,10 @@ public class Client {
    }
 
    /**
-    * a
+    * Reads the command line input from the user
     *
     * @param reader
-    * @return
+    * @return String user input
     */
    private static String readline(BufferedReader reader) {
       try {
