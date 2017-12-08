@@ -2,9 +2,7 @@ package com.server;
 
 import com.*;
 import com.BulletinBoardIntf;
-import com.Exceptions.BulletinBoardFullException;
-import com.Exceptions.InvalidMessageException;
-import com.Exceptions.MessageNotFoundException;
+import com.Exceptions.*;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -162,7 +160,8 @@ public class Server implements BulletinBoardIntf {
     * Deletes old (timed out) Messages after a certain time.
     * Will be called everytime an action on the BulletinBoard is performed.
     */
-   private void deleteOldMessages() {
+   private void deleteOldMessages() throws ServerRuntimeException {
+       try{ 
       for (int i = 0; i < messages.length; i++) {
          Message message = messages[i];
          if (message == null) continue;
@@ -172,5 +171,10 @@ public class Server implements BulletinBoardIntf {
              messages[i] = null;
          }
       }
+  } catch(Exception e) {
+      System.out.println("ServerRuntimeException:");
+      System.out.println(e);
+      throw new ServerRuntimeException();
+  }
    }
 }

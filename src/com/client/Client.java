@@ -15,6 +15,7 @@ import java.lang.String;
 public class Client {
     
     static BulletinBoardIntf bb;
+    static BufferedReader clReader;
     
     /**
     * Runs the Client
@@ -28,8 +29,9 @@ public class Client {
             bb = (BulletinBoardIntf) registry.lookup(name);
             runCLI();
         } catch (Exception e) {
-            System.err.println("ComputePi exception:");
+            System.err.println("Critical server side error:");
             e.printStackTrace();
+            System.err.println("Exiting.");
         }
     }
     
@@ -37,7 +39,7 @@ public class Client {
     * Runs the Command Line Interface that parses User inputs
     */
     private static void runCLI() {
-        BufferedReader clReader = new BufferedReader(new InputStreamReader(System.in));
+        clReader = new BufferedReader(new InputStreamReader(System.in));
         String rawInput;
         String[] userInput;
         while (true) {
@@ -76,25 +78,31 @@ public class Client {
     private static void parseUserInput(String[] userInput) {
         switch (userInput[0]) {
             case "help": // prints help information
-            System.out.println("Choose a command: ");
-            System.out.println("help | post \"message\" | count | read | read \"index\"");
+                System.out.println("Choose a command: ");
+                System.out.println("help | post [message] | count | read | read [index]");
             break;
             case "post": // posts a message
-            if (userInput.length > 1) { // The user wrote the message directly after the post command
-                String[] msg = Arrays.copyOfRange(userInput, 1, userInput.length);
-                buildAndPostMessage(msg);
-            } else { // Enter post mode where the user can enter the message.
-                
-            }
+                if (userInput.length > 1) { // The user wrote the message directly after the post command
+                    String[] msg = Arrays.copyOfRange(userInput, 1, userInput.length);
+                    buildAndPostMessage(msg);
+                } else { // Enter post mode where the user can enter the message.
+                    System.out.println("Enter the message to post:");
+                    String msg = readline(clReader).trim();
+                    if(msg.length() == 0) {
+                        System.out.println("Empty message was not send.");
+                    } else {
+                        buildAndPostMessage(msg);
+                    }
+                }
             break;
             case "count": // returns the number of messages on the BulletinBoard
-            printMessageCount();
+                printMessageCount();
             break;
             case "read": // returns all messages on the BulletinBoard
-            printAllMessages();
+                printAllMessages();
             break;
             default:
-            System.out.println("Unknown command. Type 'help' for a list of  all commands.");
+                System.out.println("Unknown command. Type 'help' for a list of  all commands.");
         }
     }
     
@@ -121,7 +129,7 @@ public class Client {
                 System.out.println(messages[i]);
             }
         } catch(RemoteException e) {
-            System.out.println("The server encountered an unknown error:");
+            System.out.println("The server encountered an unexpected error:");
             System.out.println(e);
         }
     }
@@ -137,7 +145,7 @@ public class Client {
                 System.out.println("There are " + count + " messages on the bulletinboard.");
             }
         } catch(RemoteException e) {
-            System.out.println("The server encountered an unknown error:");
+            System.out.println("The server encountered an unexpected error:");
             System.out.println(e);
         }
     }
@@ -149,6 +157,15 @@ public class Client {
     */
     private static void buildAndPostMessage(String[] wordList) {
         String message = String.join(" ", wordList);
+        buildAndPostMessage(message);
+    }
+    
+    /**
+    * sends the message to the Server
+    *
+    * @param message
+    */
+    private static void buildAndPostMessage(String message) {
         try {
             bb.putMessage(message);
         } catch (InvalidMessageException e) {
@@ -158,7 +175,7 @@ public class Client {
             System.out.println("The server responded with an BulletinBoardFullException:");
             System.out.println(e);
         } catch (RemoteException e) {
-            System.out.println("The server encountered an unknown error:");
+            System.out.println("The server encountered an unexpected error:");
             System.out.println(e);
         }
     }
