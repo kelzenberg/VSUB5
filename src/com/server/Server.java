@@ -38,13 +38,10 @@ public class Server implements BulletinBoardIntf {
      * @param args
      */
     public static void main(String[] args) {
-        if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
         try {
             Server engine = new Server();
             BulletinBoardIntf bb = (BulletinBoardIntf) UnicastRemoteObject.exportObject(engine, 0);
-            Registry registry = LocateRegistry.getRegistry();
+            Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind(nameOfService, bb);
             System.out.println("BulletinBoard bound");
         } catch (Exception e) {
