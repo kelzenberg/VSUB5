@@ -109,8 +109,8 @@ public class Client {
    private static void parseUserInput(String[] userInput) {
       switch (userInput[0]) {
          case "help": // prints help information
-            // TODO: print help information
-            // System.out.println("");
+            System.out.println("Choose a command: ");
+            System.out.println("help | post \"message\" | count | read | read \"index\"");
             break;
          case "post": // posts a message
             if (userInput.length > 1) { // The user wrote the message directly after the post command
@@ -124,7 +124,13 @@ public class Client {
 
             break;
          case "read": // returns all messages on the BulletinBoard
+            if (userInput.length > 1) { // The user wrote the message directly after the post command
+               /* TODO check if next part is "index"
+                  if yes, get only the message with the index instead all of them
+               */
+            } else { // Enter post mode where the user can enter the message.
 
+            }
             break;
          default:
             System.out.println("Unknown command. Type 'help' for a list of  all commands.");
