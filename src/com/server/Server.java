@@ -1,7 +1,7 @@
 package com.server;
 
+import com.*;
 import com.BulletinBoardIntf;
-import com.Message;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
