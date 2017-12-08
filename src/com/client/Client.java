@@ -121,7 +121,7 @@ public class Client {
             }
             break;
          case "count": // returns the number of messages on the BulletinBoard
-
+            printMessageCount();
             break;
          case "read": // returns all messages on the BulletinBoard
 
@@ -130,6 +130,16 @@ public class Client {
             System.out.println("Unknown command. Type 'help' for a list of  all commands.");
       }
    }
+
+    private static void printMessageCount() {
+        try {
+            int count = bb.getMessageCount();
+            System.out.println("There are " + count + " messages on the bulletinboard.");
+        } catch(RemoteException e) {
+            System.out.println("The server encountered an unknown error:");
+            System.out.println(e);
+        }
+    }
 
    /**
     * a
