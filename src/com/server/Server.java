@@ -168,8 +168,8 @@ public class Server implements BulletinBoardIntf {
          if (message == null) continue;
          Duration messageLifeTime = Duration.between(message.getCreated(), Instant.now());
          if (messageLifeTime.toMillis() / 1000 > maxMessageLifeTime) {
-            messages[i] = null;
-            System.out.println("Message deleted: " + i + ": \"" + messages[i].getMessage() + "\"");
+             System.out.println("Message deleted: " + i + ": \"" + messages[i].getMessage() + "\"");
+             messages[i] = null;
          }
       }
    }
