@@ -24,46 +24,13 @@ public class Client {
    public static void main(String args[]) {
       try {
          String name = "BulletinBoard";
-         Registry registry = LocateRegistry.getRegistry();
+         Registry registry = LocateRegistry.getRegistry("localhost");
          bb = (BulletinBoardIntf) registry.lookup(name);
          runCLI();
-            
-            
-            /*
-            int test = bb.getMessageCount();
-            System.out.println("All Messages: " + test);
-            try {
-                bb.putMessage("Eine tolle Nachricht!");
-            } catch(RemoteException error) {
-                System.out.println(error);
-            }
-            test = bb.getMessageCount();
-            System.out.println("All Messages: " + test);
-            printAllMessages(bb);
-            */
       } catch (Exception e) {
          System.err.println("ComputePi exception:");
          e.printStackTrace();
       }
-   }
-
-   /**
-    * Prints all the Messages of the BulletinBoard to the Console
-    *
-    * @param bb BulletinBoard
-    */
-   private static void printAllMessages(BulletinBoardIntf bb) {
-      String[] messages;
-      try {
-         messages = bb.getMessages();
-      } catch (RemoteException error) {
-         return;
-      }
-      System.out.println("Messages begin ===");
-      for (String message : messages) {
-         System.out.println(message.toString());
-      }
-      System.out.println("Messages end   ===");
    }
 
    /**
@@ -74,7 +41,7 @@ public class Client {
       String rawInput;
       String[] userInput;
       while (true) {
-         System.out.print("\n> ");
+         System.out.print("> ");
          rawInput = readline(clReader);
 
          userInput = validateUserInput(rawInput);
@@ -124,23 +91,51 @@ public class Client {
             printMessageCount();
             break;
          case "read": // returns all messages on the BulletinBoard
-            if (userInput.length > 1) { // The user wrote the message directly after the post command
-               /* TODO check if next part is "index"
-                  if yes, get only the message with the index instead all of them
-               */
-            } else { // Enter post mode where the user can enter the message.
-
-            }
+            printAllMessages();
             break;
          default:
             System.out.println("Unknown command. Type 'help' for a list of  all commands.");
       }
    }
+   
+   /**
+    * Prints all the Messages of the BulletinBoard to the Console
+    *
+    * @param bb BulletinBoard
+    */
+   private static void printAllMessages() {
+       try {
+           String[] messages = bb.getMessages();
+           if(messages.length == 0) {
+               System.out.println("There are no messages.");
+               return;
+           } else if(messages.length == 1) {
+               System.out.println("There is one message on the bulletinboard:");
+               System.out.println(messages[0]);
+               return;
+           } else {
+               System.out.println("There are " + messages.length + " messages on the bulletinboard:");
+           }
+           for(int i = 0,c = 1;i < messages.length;i++,c++) {
+               System.out.println("=> Message "+ c +":");
+               System.out.println(messages[i]);
+           }
+       } catch(RemoteException e) {
+           System.out.println("The server encountered an unknown error:");
+           System.out.println(e);
+       }
+   }
 
     private static void printMessageCount() {
         try {
             int count = bb.getMessageCount();
-            System.out.println("There are " + count + " messages on the bulletinboard.");
+            if(count == 0){
+                System.out.println("There are no messages.");
+            } else if(count == 1) {
+                System.out.println("There is one message on the bulletinboard.");
+            } else {
+                System.out.println("There are " + count + " messages on the bulletinboard.");
+            }
         } catch(RemoteException e) {
             System.out.println("The server encountered an unknown error:");
             System.out.println(e);
