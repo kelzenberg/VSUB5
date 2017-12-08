@@ -110,7 +110,7 @@ public class Server implements BulletinBoardIntf {
    @Override
    public String getMessage(int index) throws Exception {
       deleteOldMessages();
-      if (messages[index] == null) {
+      if (index < 0 || index >= maxNumMessages || messages[index] == null) {
          throw new MessageNotFoundException("The BulletinBoard contains no Message with this index.");
       }
       return messages[index].getMessage();
