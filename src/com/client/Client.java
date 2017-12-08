@@ -2,7 +2,6 @@ package com.client;
 
 import com.BulletinBoardIntf;
 
-import java.rmi.RemoteException;
 import java.rmi.ConnectException;
 
 import com.Exceptions.*;
@@ -134,10 +133,7 @@ public class Client {
             System.out.println(messages);
         } catch(MessageNotFoundException e) {
             System.out.println("There is no message with the index " + index);
-        } catch(RemoteException e) {
-            if(e instanceof MessageNotFoundException) {
-                System.out.println("ROLLMOEPSE!");
-            }
+        } catch(Exception e) {
             System.out.println("The server encountered an unexpected error:");
             System.out.println(e);
         }
@@ -165,7 +161,7 @@ public class Client {
                 System.out.println("=> Message:");
                 System.out.println(messages[i]);
             }
-        } catch(RemoteException e) {
+        } catch(Exception e) {
             System.out.println("The server encountered an unexpected error:");
             System.out.println(e);
         }
@@ -181,7 +177,7 @@ public class Client {
             } else {
                 System.out.println("There are " + count + " messages on the bulletinboard.");
             }
-        } catch(RemoteException e) {
+        } catch(Exception e) {
             System.out.println("The server encountered an unexpected error:");
             System.out.println(e);
         }
@@ -212,7 +208,7 @@ public class Client {
         } catch (BulletinBoardFullException e) {
             System.out.println("The server responded with an BulletinBoardFullException:");
             System.out.println(e);
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             System.out.println("The server encountered an unexpected error:");
             System.out.println(e);
         }
