@@ -52,12 +52,24 @@ public class Server implements BulletinBoardIntf {
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind(nameOfService, bb);
 
-            rdf = RDFConnectionFactory.connect("http://omniskop.de:9999");
+            rdf = RDFConnectionFactory.connect("http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql");
             QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
             ResultSet results = exec.execSelect();
             while (results.hasNext()){
                 System.out.println(results.next().getResource("s"));
-                System.out.println("Möp");
+                System.out.println("----------");
+            }
+
+            rdf.update("prefix foaf: <http://xmlns.com/foaf/0.1/> "
+                    + "prefix dc: <http://purl.org/dc/elements/1.1/> "
+                    + "prefix omnis: <http://omniskop.de/vs/> "
+                    + "INSERT DATA { omnis:user3 foaf:type foaf:person; "
+                    + "foaf:name \"Steffen\" }");
+
+
+            while (results.hasNext()){
+                System.out.println(results.next().getResource("s"));
+                System.out.println("----------");
             }
 
             exec.close();
