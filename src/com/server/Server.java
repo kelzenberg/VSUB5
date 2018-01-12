@@ -3,6 +3,9 @@ package com.server;
 import com.*;
 import com.BulletinBoardIntf;
 import com.Exceptions.*;
+import org.apache.jena.query.*;
+import org.apache.jena.rdfconnection.RDFConnection;
+import org.apache.jena.rdfconnection.RDFConnectionFactory;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -20,6 +23,7 @@ public class Server implements BulletinBoardIntf {
     private static String nameOfService;
     private static Message[] messages;
     private int newestMessagePointer;
+    private static RDFConnection rdf;
 
     /**
      * Constructor for the BulletinBoard Server
@@ -47,6 +51,22 @@ public class Server implements BulletinBoardIntf {
             // create RMI manager/registry
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind(nameOfService, bb);
+
+            rdf = RDFConnectionFactory.connect("http://omniskop.de:9999");
+            QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
+            ResultSet results = exec.execSelect();
+            while (results.hasNext()){
+                System.out.println(results.next().getResource("s"));
+                System.out.println("Möp");
+            }
+
+            exec.close();
+            rdf.close();
+            //rdf.queryResultSet(query,null);
+            //System.out.println(rdf.query(query));
+
+            //rdf.update("");
+
             System.out.println("BulletinBoard bound");
         } catch (Exception e) {
             System.err.println("BulletinBoard exception:");
