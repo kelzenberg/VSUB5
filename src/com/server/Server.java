@@ -1,6 +1,10 @@
 package com.server;
 
 import com.BulletinBoardIntf;
+import com.Exceptions.BulletinBoardFullException;
+import com.Exceptions.InvalidMessageException;
+import com.Exceptions.MessageNotFoundException;
+import com.Exceptions.ServerRuntimeException;
 import com.Message;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
@@ -65,12 +69,13 @@ public class Server implements BulletinBoardIntf {
                 System.out.println("----------");
             }
 
+            /*
             rdf.update("prefix foaf: <http://xmlns.com/foaf/0.1/> "
                     + "prefix dc: <http://purl.org/dc/elements/1.1/> "
                     + "prefix omnis: <http://omniskop.de/vs/> "
                     + "INSERT DATA { omnis:user3 foaf:type foaf:person; "
                     + "foaf:name \"Steffen\" }");
-
+            */
             System.out.println("Nachher:");
             while (results.hasNext()) {
                 QuerySolution next = results.next();
