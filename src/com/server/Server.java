@@ -7,7 +7,6 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.jena.rdfconnection.RDFConnectionFactory;
 
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -56,8 +55,11 @@ public class Server implements BulletinBoardIntf {
             rdf = RDFConnectionFactory.connect("http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql");
             QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
             ResultSet results = exec.execSelect();
-            while (results.hasNext()){
-                System.out.println(results.next().getResource("s"));
+            System.out.println("Vorher: ");
+            while (results.hasNext()) {
+                System.out.print(results.next().getResource("s") + "\n");
+                System.out.print(results.next().getResource("p") + "\n");
+                System.out.print(results.next().get("o")+ "\n");
                 System.out.println("----------");
             }
 
@@ -67,9 +69,11 @@ public class Server implements BulletinBoardIntf {
                     + "INSERT DATA { omnis:user3 foaf:type foaf:person; "
                     + "foaf:name \"Steffen\" }");
 
-
-            while (results.hasNext()){
-                System.out.println(results.next().getResource("s"));
+            System.out.println("Nachher:");
+            while (results.hasNext()) {
+                System.out.print(results.next().getResource("s") + "\n");
+                System.out.print(results.next().getResource("p") + "\n");
+                System.out.print(results.next().get("o") + "\n");
                 System.out.println("----------");
             }
 
