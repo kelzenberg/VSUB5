@@ -6,7 +6,8 @@ import com.Exceptions.*;
 import org.apache.jena.query.*;
 import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.jena.rdfconnection.RDFConnectionFactory;
-
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -46,7 +47,7 @@ public class Server implements BulletinBoardIntf {
         try {
             Server engine = new Server();
             // mark the Server as an RMI object
-            BulletinBoardIntf bb = (BulletinBoardIntf) UnicastRemoteObject.exportObject(engine, 0);
+            BulletinBoardIntf bb = (BulletinBoardIntf) UnicastRemoteObject.exportObject((Remote) engine, 0);
             // create RMI manager/registry
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind(nameOfService, bb);
