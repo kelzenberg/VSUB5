@@ -61,11 +61,11 @@ public class Server implements BulletinBoardIntf {
 
             //rdf = RDFConnectionFactory.connect("http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql");
             rdf = RDFConnectionFactory.connect("http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql");
-            QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
-            System.out.println("Start initialization:");
             init();
 
+            QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
             ResultSet results = exec.execSelect();
+
             while (results.hasNext()) {
                 QuerySolution next = results.next();
                 System.out.print(next.get("s") + "\n");
@@ -219,22 +219,22 @@ public class Server implements BulletinBoardIntf {
     }
 
     private static void init() {
-        System.out.print(deleteAll);
+        System.out.println("\n---------- Start initialization: ----------\n");
+
+        System.out.println(deleteAll);
         rdf.update(deleteAll);
-        System.out.print(prefixOmnis);
-        rdf.update(prefixOmnis);
-        System.out.print(prefixFOAF);
-        rdf.update(prefixFOAF);
-        System.out.print(prefixDC);
-        rdf.update(prefixDC);
-        String query = "INSERT DATA { "
+
+        String query = prefixAll
+                + "INSERT DATA { "
                 + "omnis:user1 foaf:type foaf:person;\n"
                 + "foaf:name \"Jannis\".\n"
                 + "omnis:user2 foaf:type foaf:person;\n"
                 + "foaf:name \"Nicolai\".\n"
                 + "omnis:user3 foaf:type foaf:person;\n"
                 + "foaf:name \"Steffen\".}";
-        System.out.print(query);
+        System.out.println(query);
         rdf.update(query);
+
+        System.out.println("\n---------- Initialization finished. ----------\n");
     }
 }
