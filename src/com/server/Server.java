@@ -52,7 +52,8 @@ public class Server implements BulletinBoardIntf {
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind(nameOfService, bb);
 
-            rdf = RDFConnectionFactory.connect("http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql");
+            //rdf = RDFConnectionFactory.connect("http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql");
+            rdf = RDFConnectionFactory.connect("http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql");
             QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
             ResultSet results = exec.execSelect();
             while (results.hasNext()){
