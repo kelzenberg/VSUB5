@@ -57,9 +57,10 @@ public class Server implements BulletinBoardIntf {
             ResultSet results = exec.execSelect();
             System.out.println("Vorher: ");
             while (results.hasNext()) {
-                System.out.print(results.next().getResource("s") + "\n");
-                System.out.print(results.next().getResource("p") + "\n");
-                System.out.print(results.next().get("o")+ "\n");
+                QuerySolution next = results.next();
+                System.out.print(next.get("s") + "\n");
+                System.out.print(next.get("p") + "\n");
+                System.out.print(next.get("o")+ "\n");
                 System.out.println("----------");
             }
 
@@ -71,9 +72,10 @@ public class Server implements BulletinBoardIntf {
 
             System.out.println("Nachher:");
             while (results.hasNext()) {
-                System.out.print(results.next().getResource("s") + "\n");
-                System.out.print(results.next().getResource("p") + "\n");
-                System.out.print(results.next().get("o") + "\n");
+                QuerySolution next = results.next();
+                System.out.print(next.get("s") + "\n");
+                System.out.print(next.get("p") + "\n");
+                System.out.print(next.get("o")+ "\n");
                 System.out.println("----------");
             }
 
