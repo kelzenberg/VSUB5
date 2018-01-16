@@ -8,15 +8,15 @@ public class Statements {
     // space character at the end is needed to stack commands
     public static final String prefixFOAF = "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n";
     public static final String prefixDC = "PREFIX dc: <http://purl.org/dc/elements/1.1/>\n";
-    public static final String prefixOmnis = "PREFIX omnis: <http://omniskop.de/vs/>\n";
-    public static final String prefixAll = prefixOmnis + prefixFOAF + prefixDC;
+    public static final String prefixBB = "PREFIX bb: <http://omniskop.de/vs/bb>\n";
+    public static final String prefixAll = prefixBB + prefixFOAF + prefixDC;
 
     public static final String insertData = "INSERT DATA { s p o . }"; //not functional, just the pattern
     public static final String insertMultiLineData = "INSERT DATA { s p o ; " + " p o . }";  //not functional, just the pattern
 
     public static final String abfrageMitFilter = "prefix foaf: <http://xmlns.com/foaf/0.1/>\n" +
             "prefix dc: <http://purl.org/dc/elements/1.1/>\n" +
-            "prefix omnis: <http://omniskop.de/vs/>\n" +
+            "prefix bb: <http://omniskop.de/vs/bb>\n" +
             "SELECT ?user ?name ?mbox\n" +
             "WHERE {\n" +
             "  ?user foaf:type foaf:person .\n" +

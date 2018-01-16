@@ -226,11 +226,11 @@ public class Server implements BulletinBoardIntf {
 
         String query = prefixAll
                 + "INSERT DATA { "
-                + "omnis:user1 foaf:type foaf:person;\n"
+                + "bb:user1 foaf:type foaf:person;\n"
                 + "foaf:name \"Jannis\".\n"
-                + "omnis:user2 foaf:type foaf:person;\n"
+                + "bbb:user2 foaf:type foaf:person;\n"
                 + "foaf:name \"Nicolai\".\n"
-                + "omnis:user3 foaf:type foaf:person;\n"
+                + "bb:user3 foaf:type foaf:person;\n"
                 + "foaf:name \"Steffen\".}";
         System.out.println(query);
         rdf.update(query);
