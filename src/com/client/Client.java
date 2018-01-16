@@ -211,7 +211,7 @@ public class Client {
      */
     private static void buildAndPostMessage(String message) {
         try {
-            bb.putMessage(message);
+            bb.putMessage(message, "Tester");
             System.out.println("Message posted!");
         } catch (InvalidMessageException e) {
             System.out.println("The server responded with an InvalidMessageException:");

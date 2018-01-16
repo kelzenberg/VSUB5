@@ -6,14 +6,17 @@ public class Message {
 
     private final String message;
     private final Instant created;
+    private final String author;
 
     /**
      * Constructor to create a new Message object with a message
      *
      * @param message
+     * @param author
      */
-    public Message(String message) {
+    public Message(String message, String author) {
         this.message = message;
+        this.author = author;
         this.created = Instant.now();
     }
 

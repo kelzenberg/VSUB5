@@ -11,6 +11,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.jena.rdfconnection.RDFConnectionFactory;
+
 import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -18,6 +19,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+
+import static com.Statements.*;
 
 public class Server implements BulletinBoardIntf {
 
@@ -59,38 +62,20 @@ public class Server implements BulletinBoardIntf {
             //rdf = RDFConnectionFactory.connect("http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql");
             rdf = RDFConnectionFactory.connect("http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql");
             QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
-            ResultSet results = exec.execSelect();
-            System.out.println("Vorher: ");
-            while (results.hasNext()) {
-                QuerySolution next = results.next();
-                System.out.print(next.get("s") + "\n");
-                System.out.print(next.get("p") + "\n");
-                System.out.print(next.get("o")+ "\n");
-                System.out.println("----------");
-            }
+            System.out.println("Start initialization:");
+            init();
 
-            /*
-            rdf.update("prefix foaf: <http://xmlns.com/foaf/0.1/> "
-                    + "prefix dc: <http://purl.org/dc/elements/1.1/> "
-                    + "prefix omnis: <http://omniskop.de/vs/> "
-                    + "INSERT DATA { omnis:user3 foaf:type foaf:person; "
-                    + "foaf:name \"Steffen\" }");
-            */
-            System.out.println("Nachher:");
+            ResultSet results = exec.execSelect();
             while (results.hasNext()) {
                 QuerySolution next = results.next();
                 System.out.print(next.get("s") + "\n");
                 System.out.print(next.get("p") + "\n");
-                System.out.print(next.get("o")+ "\n");
+                System.out.print(next.get("o") + "\n");
                 System.out.println("----------");
             }
 
             exec.close();
             rdf.close();
-            //rdf.queryResultSet(query,null);
-            //System.out.println(rdf.query(query));
-
-            //rdf.update("");
 
             System.out.println("BulletinBoard bound");
         } catch (Exception e) {
@@ -175,7 +160,7 @@ public class Server implements BulletinBoardIntf {
      * @throws Exception
      */
     @Override
-    public void putMessage(String message) throws Exception {
+    public void putMessage(String message, String author) throws Exception {
         deleteOldMessages();
         int free = freeSlot();
         String trimmed = message.trim();
@@ -187,7 +172,7 @@ public class Server implements BulletinBoardIntf {
                     + maxLengthMessage + " Characters.");
         }
         if (free != -1) {
-            messages[free] = new Message(trimmed);
+            messages[free] = new Message(trimmed, author);
             // set the pointer to the put message
             newestMessagePointer = free;
         } else {
@@ -231,5 +216,25 @@ public class Server implements BulletinBoardIntf {
             System.out.println(e);
             throw new ServerRuntimeException();
         }
+    }
+
+    private static void init() {
+        System.out.print(deleteAll);
+        rdf.update(deleteAll);
+        System.out.print(prefixOmnis);
+        rdf.update(prefixOmnis);
+        System.out.print(prefixFOAF);
+        rdf.update(prefixFOAF);
+        System.out.print(prefixDC);
+        rdf.update(prefixDC);
+        String query = "INSERT DATA { "
+                + "omnis:user1 foaf:type foaf:person;\n"
+                + "foaf:name \"Jannis\".\n"
+                + "omnis:user2 foaf:type foaf:person;\n"
+                + "foaf:name \"Nicolai\".\n"
+                + "omnis:user3 foaf:type foaf:person;\n"
+                + "foaf:name \"Steffen\".}";
+        System.out.print(query);
+        rdf.update(query);
     }
 }
