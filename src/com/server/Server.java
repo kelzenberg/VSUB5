@@ -118,7 +118,7 @@ public class Server implements BulletinBoardIntf {
             if (messages[index] == null) {
                 break;
             }
-            temp.add("MSG" + index + ": " + messages[index].getMessage());
+            temp.add("MSG" + index + ": " + messages[index].getContent());
             index--;
 
             // if pointer reached beginning of array
@@ -149,7 +149,7 @@ public class Server implements BulletinBoardIntf {
         if (index < 0 || index >= maxNumMessages || messages[index] == null) {
             throw new MessageNotFoundException("The BulletinBoard contains no Message with this index.");
         }
-        return messages[index].getMessage();
+        return messages[index].getContent();
     }
 
     /**
@@ -207,7 +207,7 @@ public class Server implements BulletinBoardIntf {
                 if (message == null) continue;
                 Duration messageLifeTime = Duration.between(message.getCreated(), Instant.now());
                 if (messageLifeTime.toMillis() / 1000 > maxMessageLifeTime) {
-                    System.out.println("Message deleted: " + i + ": \"" + messages[i].getMessage() + "\"");
+                    System.out.println("Message deleted: " + i + ": \"" + messages[i].getContent() + "\"");
                     messages[i] = null;
                 }
             }

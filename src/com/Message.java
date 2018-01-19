@@ -7,24 +7,24 @@ public class Message {
     private final String firstName;
     private final String lastName;
     private final String email;
-    private final String receiver;
-    private final String topic;
-    private final String message;
+    private final String recipient;
+    private final String subject;
+    private final String content;
     private final Instant created;
 
     /**
-     * Constructor to create a new Message object with a message
+     * Constructor to create a new Message object with a content
      *
-     * @param message
+     * @param content
      * @param firstName
      */
-    public Message(String firstName, String lastName, String email, String receiver, String topic, String message, Instant created) {
+    public Message(String firstName, String lastName, String email, String recipient, String subject, String content, Instant created) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.receiver = receiver;
-        this.topic = topic;
-        this.message = message;
+        this.recipient = recipient;
+        this.subject = subject;
+        this.content = content;
         this.created = created;
     }
 
@@ -52,24 +52,24 @@ public class Message {
     /**
      * @return
      */
-    public String getReceiver() {
-        return receiver;
+    public String getRecipient() {
+        return recipient;
     }
 
     /**
      * @return
      */
-    public String getTopic() {
-        return topic;
+    public String getSubject() {
+        return subject;
     }
 
     /**
-     * Get this objects message
+     * Get this objects content
      *
-     * @return String message
+     * @return String content
      */
-    public String getMessage() {
-        return message;
+    public String getContent() {
+        return content;
     }
 
     /**
@@ -89,7 +89,7 @@ public class Message {
     @Override
     public String toString() {
         return "Message{" +
-                "message='" + message + '\'' +
+                "content='" + content + '\'' +
                 ", created=" + created +
                 '}';
     }
