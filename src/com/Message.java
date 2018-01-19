@@ -4,20 +4,63 @@ import java.time.Instant;
 
 public class Message {
 
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String receiver;
+    private final String topic;
     private final String message;
     private final Instant created;
-    private final String author;
 
     /**
      * Constructor to create a new Message object with a message
      *
      * @param message
-     * @param author
+     * @param firstName
      */
-    public Message(String message, String author) {
+    public Message(String firstName, String lastName, String email, String receiver, String topic, String message, Instant created) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.receiver = receiver;
+        this.topic = topic;
         this.message = message;
-        this.author = author;
-        this.created = Instant.now();
+        this.created = created;
+    }
+
+    /**
+     * @return
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @return
+     */
+    public String getLastName() {
+        return lastName;
+    }
+
+    /**
+     * @return
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @return
+     */
+    public String getReceiver() {
+        return receiver;
+    }
+
+    /**
+     * @return
+     */
+    public String getTopic() {
+        return topic;
     }
 
     /**
