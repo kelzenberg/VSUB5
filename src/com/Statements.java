@@ -14,13 +14,15 @@ public class Statements {
     public static final String insertData = "INSERT DATA { s p o . }"; //not functional, just the pattern
     public static final String insertMultiLineData = "INSERT DATA { s p o ; " + " p o . }";  //not functional, just the pattern
 
-    public static final String createMessage = String.format("INSERT {\n" +
-            "    data:message rdf:type bb:Message ;\n" +
-            "        bb:subject \"%s\" ;\n" +
-            "        bb:content \"Eine Nachricht, die ist Lustig, eine Nachricht, die ist schön.\" ;\n" +
-            "        bb:creator data:user1 ;\n" +
-            "        bb:timestamp ?time;\n" +
-            "        bb:recipient data:user1 .\n" +
-            "} WHERE {BIND(NOW() as ?time)}");
-
+    public static String createMessage(String subject, String content, String creator, String recipient) {
+        return prefixAll + String.format("INSERT {\n" +
+                        "    data:message rdf:type bb:Message ;\n" +
+                        "        bb:subject \"%s\" ;\n" +
+                        "        bb:content \"%s\" ;\n" +
+                        "        bb:creator data:%s ;\n" +
+                        "        bb:timestamp ?time;\n" +
+                        "        bb:recipient data:%s .\n" +
+                        "} WHERE {BIND(NOW() as ?time)}",
+                subject, content, creator, recipient);
+    }
 }
