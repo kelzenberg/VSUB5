@@ -24,5 +24,15 @@ public class Statements {
                         "        bb:recipient data:%s .\n" +
                         "} WHERE {BIND(NOW() as ?time)}",
                 subject, content, creator, recipient);
+
+    }
+    
+    public static String addUser(String firstName, String lastName, String email) {
+        return prefixAll + String.format("INSERT DATA {\n"
+                        + "data:user rdf:type bb:User;\n"
+                        + "foaf:firstName \"%s\";\n"
+                        + "foaf:lastName \"%s\";\n"
+                        + "foaf: mbox \"%s\".\n",
+                firstName, lastName, email);
     }
 }
