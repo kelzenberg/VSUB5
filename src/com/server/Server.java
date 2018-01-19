@@ -63,6 +63,7 @@ public class Server implements BulletinBoardIntf {
             rdf = RDFConnectionFactory.connect("http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql");
             init();
 
+            /* BEISPIEL QUERY:
             QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
             ResultSet results = exec.execSelect();
 
@@ -75,6 +76,8 @@ public class Server implements BulletinBoardIntf {
             }
 
             exec.close();
+            */
+
             rdf.close();
 
             System.out.println("BulletinBoard bound");
