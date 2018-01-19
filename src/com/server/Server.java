@@ -28,8 +28,8 @@ public class Server implements BulletinBoardIntf {
     private static int maxMessageLifeTime;
     private static int maxLengthMessage;
     private static String nameOfService;
-    private static Message[] messages;
-    private int newestMessagePointer;
+    //private static Message[] messages;
+    //private int newestMessagePointer;
     private static RDFConnection rdf;
 
     /**
@@ -41,8 +41,8 @@ public class Server implements BulletinBoardIntf {
         maxMessageLifeTime = 600;
         maxLengthMessage = 160;
         nameOfService = "BulletinBoard";
-        newestMessagePointer = 0;
-        messages = new Message[maxNumMessages];
+        //newestMessagePointer = 0;
+        //messages = new Message[maxNumMessages];
     }
 
     /**
@@ -97,11 +97,12 @@ public class Server implements BulletinBoardIntf {
     public int getMessageCount() throws Exception {
         deleteOldMessages();
         int count = 0;
+        /*
         for (Message message : messages) {
             if (message != null) {
                 count++;
             }
-        }
+        }*/
         return count;
     }
 
@@ -115,6 +116,7 @@ public class Server implements BulletinBoardIntf {
     public String[] getMessages() throws Exception {
         deleteOldMessages();
         ArrayList<String> temp = new ArrayList<>();
+        /*
         // create pointer for circular Array
         int index = newestMessagePointer;
         while (true) {
@@ -133,7 +135,7 @@ public class Server implements BulletinBoardIntf {
             if (index == newestMessagePointer) {
                 break;
             }
-        }
+        }*/
         String[] output = new String[temp.size()];
         output = temp.toArray(output);
         return output;
@@ -149,10 +151,13 @@ public class Server implements BulletinBoardIntf {
     @Override
     public String getMessage(int index) throws Exception {
         deleteOldMessages();
+        /*
         if (index < 0 || index >= maxNumMessages || messages[index] == null) {
             throw new MessageNotFoundException("The BulletinBoard contains no Message with this index.");
         }
         return messages[index].getContent();
+        */
+        return null;
     }
 
     /**
@@ -174,6 +179,7 @@ public class Server implements BulletinBoardIntf {
             throw new InvalidMessageException("Provided Message is too long. Please restrict yourself to "
                     + maxLengthMessage + " Characters.");
         }
+        /*
         if (free != -1) {
             messages[free] = new Message(trimmed, author);
             // set the pointer to the put message
@@ -181,6 +187,7 @@ public class Server implements BulletinBoardIntf {
         } else {
             throw new BulletinBoardFullException();
         }
+        */
     }
 
     /**
@@ -190,10 +197,12 @@ public class Server implements BulletinBoardIntf {
      * @return int index of free slot otherwise -1
      */
     private int freeSlot() {
+        /*
         int free = (newestMessagePointer + 1) % maxNumMessages;
         if (messages[free] == null) {
             return free;
         }
+        */
         return -1;
     }
 
@@ -204,6 +213,7 @@ public class Server implements BulletinBoardIntf {
      * @throws ServerRuntimeException
      */
     private void deleteOldMessages() throws ServerRuntimeException {
+        /*
         try {
             for (int i = 0; i < messages.length; i++) {
                 Message message = messages[i];
@@ -219,6 +229,7 @@ public class Server implements BulletinBoardIntf {
             System.out.println(e);
             throw new ServerRuntimeException();
         }
+        */
     }
 
     private static void init() {
