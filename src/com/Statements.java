@@ -26,7 +26,7 @@ public class Statements {
                 subject, content, creator, recipient);
 
     }
-    
+
     public static String addUser(String firstName, String lastName, String email) {
         return prefixAll + String.format("INSERT DATA {\n"
                         + "data:user rdf:type bb:User;\n"
@@ -34,5 +34,13 @@ public class Statements {
                         + "foaf:lastName \"%s\";\n"
                         + "foaf: mbox \"%s\".\n",
                 firstName, lastName, email);
+    }
+
+    public static String getMyMessages(String email) {
+        return prefixAll + String.format("select ?content WHERE {\n"
+                        + "?msgS bb:content ?content.\n"
+                        + "?msgS bb:recipient ?receivers.\n"
+                        + "VALUES ?receivers { \"all\" \"%s\" } .\n",
+                email);
     }
 }
