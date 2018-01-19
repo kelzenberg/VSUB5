@@ -1,23 +1,17 @@
 package com.server;
 
 import com.BulletinBoardIntf;
-import com.Exceptions.BulletinBoardFullException;
 import com.Exceptions.InvalidMessageException;
-import com.Exceptions.MessageNotFoundException;
 import com.Exceptions.ServerRuntimeException;
-import com.Message;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.jena.rdfconnection.RDFConnectionFactory;
 
-import java.rmi.Remote;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.ArrayList;
 
 import static com.Statements.*;
@@ -131,13 +125,14 @@ public class Server implements BulletinBoardIntf {
      * Creates a new Message object with input message
      * and puts it into the next free slot on the BulletinBoard
      *
-     * @param msg
+     * @param message
+     * @param author
      * @throws Exception
      */
     @Override
     public void putMessage(String message, String author) throws Exception {
         deleteOldMessages();
-        int free = freeSlot();
+        //int free = freeSlot();
         String trimmed = message.trim();
         if (trimmed.isEmpty()) {
             throw new InvalidMessageException("Provided Message is empty. Please send us Content.");
@@ -162,20 +157,34 @@ public class Server implements BulletinBoardIntf {
     private static void init() {
         System.out.println("\n---------- Start initialization: ----------\n");
 
-        System.out.println(deleteAll);
-        rdf.update(deleteAll);
+        //System.out.println(deleteAll);
+        //rdf.update(deleteAll);
 
-        String query = prefixAll
-                + "INSERT DATA { "
-                + "bb:user1 foaf:type foaf:person;\n"
-                + "foaf:name \"Jannis\".\n"
-                + "bbb:user2 foaf:type foaf:person;\n"
-                + "foaf:name \"Nicolai\".\n"
-                + "bb:user3 foaf:type foaf:person;\n"
-                + "foaf:name \"Steffen\".}";
+        String query = addUser("Marylin", "RonMoe","moe@mary.de");
+        System.out.println(query);
+        rdf.update(query);
+
+        query = publishMessage("VS","Dit is schnieke.", getUser("moe@mary.de"),"all");
         System.out.println(query);
         rdf.update(query);
 
         System.out.println("\n---------- Initialization finished. ----------\n");
+
+        System.out.println("\n---------- Start Querying: ----------\n");
+
+        QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
+        ResultSet results = exec.execSelect();
+
+        while (results.hasNext()) {
+            QuerySolution next = results.next();
+            System.out.print(next.get("s") + "  ");
+            System.out.print(next.get("p") + "  ");
+            System.out.print(next.get("o") + "  ");
+            System.out.println("----------");
+        }
+
+        exec.close();
+
+        System.out.println("\n---------- Querying finished. ----------\n");
     }
 }
