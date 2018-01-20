@@ -3,7 +3,6 @@ package com.server;
 import com.BulletinBoardIntf;
 import com.Exceptions.InvalidMessageException;
 import com.Exceptions.ServerRuntimeException;
-import com.Statements;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
@@ -160,9 +159,9 @@ public class Server implements BulletinBoardIntf {
 
         System.out.println("------- getUser():\n" + getUser("INPUT"));
         System.out.println("------- addUser():\n" + addUser("INPUT1", "INPUT2", "INPUT3"));
-        System.out.println("------- getMyMessages():\n" + getMyMessages("INPUT"));
+        System.out.println("------- getMessagesForUser():\n" + getMessagesForUser("INPUT"));
         System.out.println("------- publishMessage():\n" + publishMessage("INPUT1", "INPUT2", "INPUT3", "INPUT4"));
-        System.out.println("------- deleteOldMessages():\n" + deleteOldMessages("INPUT"));
+        System.out.println("------- deleteOldMessages():\n" + deleteOldMessages());
 
         System.out.println("---------- Methods listed. ----------|\n");
 

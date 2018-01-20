@@ -20,12 +20,26 @@ public class Statements {
     // deletes everything in TripleStore
     public static final String deleteAll = "DELETE where { ?s ?o ?p }\n";
 
+    /**
+     * Gets the user with @param email
+     *
+     * @param email Email for desired User
+     * @return String that can be queried and/or update in SPARQL
+     */
     public static String getUser(String email) {
         return prefixAll + String.format("SELECT ?s WHERE {\n"
                         + "?s foaf:mbox \"%s\" . }\n",
                 email);
     }
 
+    /**
+     * Adds a new user with @param firstName, lastName, email
+     *
+     * @param firstName of User
+     * @param lastName  of User
+     * @param email     of User
+     * @return String that can be queried and/or update in SPARQL
+     */
     public static String addUser(String firstName, String lastName, String email) {
         // TODO: prüfen, ob Email zu Nutzer existiert
         return prefixAll + String.format("INSERT DATA {\n"
@@ -36,7 +50,13 @@ public class Statements {
                 firstName, lastName, email);
     }
 
-    public static String getMyMessages(String email) {
+    /**
+     * Gets all the Messages that the User with @param email can read (or for 'all')
+     *
+     * @param email of User
+     * @return String that can be queried and/or update in SPARQL
+     */
+    public static String getMessagesForUser(String email) {
         // TODO: prüfen, ob Email zu Nutzer existiert
         return prefixAll + String.format("SELECT ?content WHERE {\n"
                         + "?msgS bb:content ?content .\n"
@@ -45,6 +65,15 @@ public class Statements {
                 email);
     }
 
+    /**
+     * Publishes a Message with @param subject, content from @param creator to @param recipient
+     *
+     * @param subject   of Message
+     * @param content   of Message
+     * @param creator   of Message
+     * @param recipient of Message
+     * @return String that can be queried and/or update in SPARQL
+     */
     public static String publishMessage(String subject, String content, String creator, String recipient) {
         return prefixAll + String.format("INSERT {\n"
                         + "data:message rdf:type bb:Message ;\n"
@@ -58,13 +87,17 @@ public class Statements {
 
     }
 
-    public static String deleteOldMessages(String email) {
-        // TODO: prüfen, ob Email zu Nutzer existiert
+    /**
+     * Deletes all Messages that are older than 10 Minutes (see Server.maxMessageLifeTime)
+     *
+     * @return String that can be queried and/or update in SPARQL
+     */
+    public static String deleteOldMessages() {
         return prefixAll + String.format("DELETE {?s ?p ?o} WHERE {\n"
-                        + "?s ?p ?o .\n"
-                        + "?s bb:timestamp ?time .\n"
-                        + "FILTER ((NOW() - ?time) > ?10min)\n"
-                        + "BIND ((\"2000-01-01T00:10:00.000Z\"^^xsd:dateTime) - (\"2000-01-01T00:00:00.000Z\"^^xsd:dateTime) as ?10min) }\n",
-                email);
+                + "?s ?p ?o .\n"
+                + "?s bb:timestamp ?time .\n"
+                + "FILTER ((NOW() - ?time) > ?10min)\n"
+                + "BIND ((\"2000-01-01T00:10:00.000Z\"^^xsd:dateTime) - (\"2000-01-01T00:00:00.000Z\"^^xsd:dateTime) as ?10min) }\n"
+        );
     }
 }
