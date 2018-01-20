@@ -23,6 +23,7 @@ public class Server implements BulletinBoardIntf {
     private static int maxLengthMessage;
     private static String nameOfService;
     private static RDFConnection rdf;
+    private static String host;
 
     /**
      * Constructor for the BulletinBoard Server
@@ -33,6 +34,7 @@ public class Server implements BulletinBoardIntf {
         maxMessageLifeTime = 600;
         maxLengthMessage = 160;
         nameOfService = "BulletinBoard";
+        host = "http://omniskop.de:8080/blazegraph/sparql";
     }
 
     /**
@@ -48,33 +50,69 @@ public class Server implements BulletinBoardIntf {
             // create RMI manager/registry
             Registry registry = LocateRegistry.createRegistry(1099);
             registry.rebind(nameOfService, bb);
-
-            //rdf = RDFConnectionFactory.connect("http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql", "http://localhost:9999/blazegraph/sparql");
-            rdf = RDFConnectionFactory.connect("http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql", "http://omniskop.de:8080/blazegraph/sparql");
+            // connect to Blazegraph Triple Store
+            connect();
+            // start Initialization & Tests
             init();
-
-            /* BEISPIEL QUERY:
-            QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
-            ResultSet results = exec.execSelect();
-
-            while (results.hasNext()) {
-                QuerySolution next = results.next();
-                System.out.print(next.get("s") + "\n");
-                System.out.print(next.get("p") + "\n");
-                System.out.print(next.get("o") + "\n");
-                System.out.println("----------");
-            }
-
-            exec.close();
-            */
-
-            rdf.close();
-
-            System.out.println("BulletinBoard bound");
+            // close Connection to Blazegraph Triple Store
+            close();
         } catch (Exception e) {
             System.err.println("BulletinBoard exception:");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Connects to Blazegraph Host
+     */
+    private static void connect() {
+        rdf = RDFConnectionFactory.connect(host, host, host);
+        System.out.println("|- Connection established. -|");
+    }
+
+    /**
+     * Closes Connection to Blazegraph Host
+     */
+    private static void close() {
+        rdf.close();
+        System.out.println("|- Connection closed. -|\n");
+    }
+
+    /**
+     * Sends the given Query to the Host and returns an ArrayList with the results of the Query
+     *
+     * @param query for the Host in SPARQL
+     * @return ArrayList\<QuerySolution\> with all Results of @param query
+     */
+    private static ArrayList<QuerySolution> query(String query) {
+        connect();
+        System.out.println("|- Send Query to Host...");
+        System.out.println("|- with Query:\n" + query + "(End of Query) -|");
+        ArrayList<QuerySolution> results = new ArrayList<>();
+        QueryExecution exec = rdf.query(query);
+        ResultSet resultSet = exec.execSelect();
+        while (resultSet.hasNext()) {
+            QuerySolution next = resultSet.next();
+            results.add(next);
+        }
+        exec.close();
+        System.out.println("... Returning Query Results. -|");
+        close();
+        return results;
+    }
+
+    /**
+     * Updates the Host with the given Query
+     *
+     * @param query
+     */
+    private static void update(String query) {
+        connect();
+        System.out.println("|- Updating Host...");
+        System.out.println("|- with Query:\n" + query + "(End of Query) -|");
+        rdf.update(query);
+        System.out.println("... Update Finished. -|");
+        close();
     }
 
     /**
@@ -98,9 +136,9 @@ public class Server implements BulletinBoardIntf {
      * @throws Exception
      */
     @Override
-    public String[] getMessages() throws Exception {
-        deletesOldMessages();
+    public String[] getMessages(String email) throws Exception {
         ArrayList<String> temp = new ArrayList<>();
+
 
         String[] output = new String[temp.size()];
         output = temp.toArray(output);
@@ -155,7 +193,7 @@ public class Server implements BulletinBoardIntf {
     }
 
     private static void init() {
-        System.out.println("\n|---------- Listing all Methods: ----------\n");
+        System.out.println("\n|---------- Listing all Methods: ----------|\n");
 
         System.out.println("------- getUser():\n" + getUser("INPUT"));
         System.out.println("------- addUser():\n" + addUser("INPUT1", "INPUT2", "INPUT3"));
@@ -165,47 +203,28 @@ public class Server implements BulletinBoardIntf {
         System.out.println("------- publishMessage():\n" + publishMessage("INPUT1", "INPUT2", "INPUT3", "INPUT4"));
         System.out.println("------- deleteOldMessages():\n" + deleteOldMessages());
 
-        System.out.println("---------- Methods listed. ----------|\n");
+        System.out.println("|---------- Start Testing: ----------|\n");
 
-        System.out.println("|---------- Start Testing: ----------\n");
-
-        //System.out.println(deleteAll);
         // deletes everything in TripleStore !!!
-        //rdf.update(deleteAll);
+        //update(deleteAll);
 
-        String query = addUser("Marylin", "RonMoe", "moe@mary.de");
-        System.out.println("------- addUser():\n" + query);
-        rdf.update(query);
+        update(addUser("Marylin", "RonMoe", "moe@mary.de"));
 
-        QueryExecution exec = rdf.query(getUser("moe@mary.de"));
-        ResultSet results = exec.execSelect();
+        //get the User with Email to use 'user' in publishMessage()
         String user = "";
-        while (results.hasNext()) {
-            QuerySolution next = results.next();
-            user = next.get("s").toString();
-            //System.out.println(user);
+        for (QuerySolution x : query(getUser("moe@mary.de"))) {
+            user = x.get("s").toString();
+        }
+        update(publishMessage("VS", "Dit isn Test.", user, "all"));
+
+        System.out.println("|---------- Querying all Results... ----------\n");
+
+        for (QuerySolution x : query(queryAll)) {
+            System.out.print("### " + x.get("s") + "  ");
+            System.out.print(x.get("p") + "  ");
+            System.out.println(x.get("o") + "  ");
         }
 
-        query = publishMessage("VS", "Dit isn Test.", user, "all");
-        System.out.println("------- publishMessage():\n" + query);
-        rdf.update(query);
-
-        System.out.println("---------- Testing finished. ----------|\n");
-
-        System.out.println("|---------- Start querying Results: ----------\n");
-
-        exec = rdf.query("SELECT * { ?s ?p ?o }");
-        results = exec.execSelect();
-
-        while (results.hasNext()) {
-            QuerySolution next = results.next();
-            System.out.print("### " + next.get("s") + "  ");
-            System.out.print(next.get("p") + "  ");
-            System.out.println(next.get("o") + "  ");
-        }
-
-        System.out.println("\n---------- Querying Results finished. ----------|\n");
-
-        exec.close();
+        System.out.println("\n---------- Querying Results finished. ----------|");
     }
 }

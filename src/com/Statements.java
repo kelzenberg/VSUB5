@@ -10,10 +10,8 @@ public class Statements {
     public static final String prefixRDFS = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema>\n";
     public static final String prefixAll = prefixFOAF + prefixBB + prefixDATA + prefixRDF + prefixRDFS;
 
-    //not functional, just the pattern
+    //NOT FUNCTIONAL, just the pattern
     public static final String insertData = "INSERT DATA { s p o . }";
-    //not functional, just the pattern
-    public static final String insertMultiLineData = "INSERT DATA { s p o ; " + " p o . }";
 
     // gets everything in TripleStore
     public static final String queryAll = "SELECT * { ?s ?p ?o }\n";

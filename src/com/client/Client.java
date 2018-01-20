@@ -153,7 +153,7 @@ public class Client {
      */
     private static void printAllMessages() {
         try {
-            String[] messages = bb.getMessages();
+            String[] messages = bb.getMessages("");
             if (messages.length == 0) {
                 System.out.println("There are no messages. Fill that emptiness!");
                 return;
