@@ -123,10 +123,8 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public int getMessageCount() throws Exception {
-        deletesOldMessages();
-        int count = 0;
-
-        return count;
+        // TODO: get Message Count
+        return 0;
     }
 
     /**
@@ -138,8 +136,10 @@ public class Server implements BulletinBoardIntf {
     @Override
     public String[] getMessages(String email) throws Exception {
         ArrayList<String> temp = new ArrayList<>();
-
-
+        for (QuerySolution x : query(getMessagesForUser(email))) {
+            temp.add(x.get("s").toString());
+            // TODO: nur die Subjects returnen oder noch mehr?
+        }
         String[] output = new String[temp.size()];
         output = temp.toArray(output);
         return output;
@@ -154,9 +154,8 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public String getMessage(int index) throws Exception {
-        deletesOldMessages();
-
-        return null;
+        // TODO: get specific Message with ID/Index
+        return "";
     }
 
     /**
@@ -169,8 +168,6 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public void putMessage(String message, String author) throws Exception {
-        deletesOldMessages();
-        //int free = freeSlot();
         String trimmed = message.trim();
         if (trimmed.isEmpty()) {
             throw new InvalidMessageException("Provided Message is empty. Please send us Content.");
@@ -179,7 +176,7 @@ public class Server implements BulletinBoardIntf {
             throw new InvalidMessageException("Provided Message is too long. Please restrict yourself to "
                     + maxLengthMessage + " Characters.");
         }
-
+        // TODO: put a new Message on the Board
     }
 
     /**
@@ -189,7 +186,7 @@ public class Server implements BulletinBoardIntf {
      * @throws ServerRuntimeException
      */
     private void deletesOldMessages() throws ServerRuntimeException {
-
+        // TODO: delete old Message after Timeout (still needed?)
     }
 
     private static void init() {
