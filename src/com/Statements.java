@@ -21,7 +21,7 @@ public class Statements {
                         "    data:message rdf:type bb:Message;\n" +
                         "        bb:subject \"%s\";\n" +
                         "        bb:content \"%s\";\n" +
-                        "        bb:creator \"%s\";\n" + // TODO: creator soll String sein oder nicht?
+                        "        bb:creator \"%s\";\n" + // TODO: creator bekommt String als Input oder nicht?
                         "        bb:timestamp ?time;\n" +
                         "        bb:recipient \"%s\".}\n" +
                         "WHERE {BIND(NOW() as ?time)}",

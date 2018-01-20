@@ -155,7 +155,7 @@ public class Server implements BulletinBoardIntf {
     }
 
     private static void init() {
-        System.out.println("\n|---------- Start initialization: ----------\n");
+        System.out.println("\n|---------- Start Testing: ----------\n");
 
         //System.out.println(deleteAll);
         //rdf.update(deleteAll);
@@ -177,9 +177,9 @@ public class Server implements BulletinBoardIntf {
         System.out.println("------- publishMessage:\n" + query);
         rdf.update(query);
 
-        System.out.println("\n---------- Initialization finished. ----------|\n");
+        System.out.println("\n---------- Testing finished. ----------|\n");
 
-        System.out.println("|---------- Start Querying: ----------\n");
+        System.out.println("|---------- Start querying Results: ----------\n");
 
         exec = rdf.query("SELECT * { ?s ?p ?o }");
         results = exec.execSelect();
@@ -191,8 +191,8 @@ public class Server implements BulletinBoardIntf {
             System.out.println(next.get("o") + "  ");
         }
 
-        exec.close();
+        System.out.println("\n---------- Querying Results finished. ----------|\n");
 
-        System.out.println("\n---------- Querying finished. ----------|\n");
+        exec.close();
     }
 }
