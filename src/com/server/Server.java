@@ -155,36 +155,44 @@ public class Server implements BulletinBoardIntf {
     }
 
     private static void init() {
-        System.out.println("\n---------- Start initialization: ----------\n");
+        System.out.println("\n|---------- Start initialization: ----------\n");
 
         //System.out.println(deleteAll);
         //rdf.update(deleteAll);
 
-        String query = addUser("Marylin", "RonMoe","moe@mary.de");
-        System.out.println(query);
+        String query = addUser("Marylin", "RonMoe", "moe@mary.de");
+        System.out.println("------- addUser:\n" + query);
         rdf.update(query);
 
-        query = publishMessage("VS","Dit is schnieke.", getUser("moe@mary.de"),"all");
-        System.out.println(query);
-        rdf.update(query);
-
-        System.out.println("\n---------- Initialization finished. ----------\n");
-
-        System.out.println("\n---------- Start Querying: ----------\n");
-
-        QueryExecution exec = rdf.query("SELECT * { ?s ?p ?o }");
+        QueryExecution exec = rdf.query(getUser("moe@mary.de"));
         ResultSet results = exec.execSelect();
+        String user = "";
+        while (results.hasNext()) {
+            QuerySolution next = results.next();
+            user = next.get("s").toString();
+            //System.out.println(user);
+        }
+
+        query = publishMessage("VS", "Dit isn Test.", user, "all");
+        System.out.println("------- publishMessage:\n" + query);
+        rdf.update(query);
+
+        System.out.println("\n---------- Initialization finished. ----------|\n");
+
+        System.out.println("|---------- Start Querying: ----------\n");
+
+        exec = rdf.query("SELECT * { ?s ?p ?o }");
+        results = exec.execSelect();
 
         while (results.hasNext()) {
             QuerySolution next = results.next();
-            System.out.print(next.get("s") + "  ");
+            System.out.print("### " + next.get("s") + "  ");
             System.out.print(next.get("p") + "  ");
-            System.out.print(next.get("o") + "  ");
-            System.out.println("----------");
+            System.out.println(next.get("o") + "  ");
         }
 
         exec.close();
 
-        System.out.println("\n---------- Querying finished. ----------\n");
+        System.out.println("\n---------- Querying finished. ----------|\n");
     }
 }

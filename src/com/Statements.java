@@ -21,7 +21,7 @@ public class Statements {
                         "    data:message rdf:type bb:Message;\n" +
                         "        bb:subject \"%s\";\n" +
                         "        bb:content \"%s\";\n" +
-                        "        bb:creator %s;\n" + // TODO: creator macht Sorgen
+                        "        bb:creator \"%s\";\n" + // TODO: creator soll String sein oder nicht?
                         "        bb:timestamp ?time;\n" +
                         "        bb:recipient \"%s\".}\n" +
                         "WHERE {BIND(NOW() as ?time)}",
@@ -31,7 +31,7 @@ public class Statements {
 
     public static String addUser(String firstName, String lastName, String email) {
         return prefixAll + String.format("INSERT DATA {\n"
-                        + "data:user rdf:type bb:User;\n"
+                        + "data:user rdf:type bb:User;\n" // TODO: data:userX muss für X Zahl hochzählen
                         + "foaf:firstName \"%s\";\n"
                         + "foaf:lastName \"%s\";\n"
                         + "foaf:mbox \"%s\".}\n",
@@ -40,12 +40,12 @@ public class Statements {
 
     public static String getUser(String email) {
         return prefixAll + String.format("SELECT ?s WHERE {\n"
-                        + "?s foaf:mbox \"%s\"\n",
+                        + "?s foaf:mbox \"%s\"}\n",
                 email);
     }
 
     public static String getMyMessages(String email) {
-        return prefixAll + String.format("select ?content WHERE {\n"
+        return prefixAll + String.format("SELECT ?content WHERE {\n"
                         + "?msgS bb:content ?content.\n"
                         + "?msgS bb:recipient ?receivers.\n"
                         + "VALUES ?receivers { \"all\" \"%s\" } .\n",
