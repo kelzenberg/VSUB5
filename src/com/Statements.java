@@ -66,6 +66,35 @@ public class Statements {
     }
 
     /**
+     * Gets all Messages found for @param subject
+     *
+     * @param subject of Message
+     * @return String that can be queried and/or update in SPARQL
+     */
+    public static String getMessagesForSubject(String subject) {
+        return prefixAll + String.format("SELECT ?s ?p ?o WHERE {\n"
+                        + "?s ?p ?o .\n"
+                        + "?s bb:subject \"%s\" . }\n",
+                subject);
+    }
+
+    /**
+     * Gets all Messages found for @param subject that @param email can read (or for 'all')
+     *
+     * @param subject of Message
+     * @param email   of User
+     * @return String that can be queried and/or update in SPARQL
+     */
+    public static String getMessagesForSubjectAndUser(String subject, String email) {
+        return prefixAll + String.format("SELECT ?s ?p ?o WHERE {\n"
+                        + "?s ?p ?o .\n"
+                        + "?s bb:subject \"%s\" . \n"
+                        + "?s bb:recipient ?receivers .\n"
+                        + "VALUES ?receivers { \"all\" \"%s\" } . }\n",
+                subject, email);
+    }
+
+    /**
      * Publishes a Message with @param subject, content from @param creator to @param recipient
      *
      * @param subject   of Message

@@ -160,6 +160,8 @@ public class Server implements BulletinBoardIntf {
         System.out.println("------- getUser():\n" + getUser("INPUT"));
         System.out.println("------- addUser():\n" + addUser("INPUT1", "INPUT2", "INPUT3"));
         System.out.println("------- getMessagesForUser():\n" + getMessagesForUser("INPUT"));
+        System.out.println("------- getMessagesForSubject():\n" + getMessagesForSubject("INPUT"));
+        System.out.println("------- getMessagesForSubjectAndUser():\n" + getMessagesForSubjectAndUser("INPUT", "INPUT"));
         System.out.println("------- publishMessage():\n" + publishMessage("INPUT1", "INPUT2", "INPUT3", "INPUT4"));
         System.out.println("------- deleteOldMessages():\n" + deleteOldMessages());
 
