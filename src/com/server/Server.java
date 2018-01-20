@@ -3,6 +3,7 @@ package com.server;
 import com.BulletinBoardIntf;
 import com.Exceptions.InvalidMessageException;
 import com.Exceptions.ServerRuntimeException;
+import com.Statements;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
@@ -85,7 +86,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public int getMessageCount() throws Exception {
-        deleteOldMessages();
+        deletesOldMessages();
         int count = 0;
 
         return count;
@@ -99,7 +100,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public String[] getMessages() throws Exception {
-        deleteOldMessages();
+        deletesOldMessages();
         ArrayList<String> temp = new ArrayList<>();
 
         String[] output = new String[temp.size()];
@@ -116,7 +117,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public String getMessage(int index) throws Exception {
-        deleteOldMessages();
+        deletesOldMessages();
 
         return null;
     }
@@ -131,7 +132,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public void putMessage(String message, String author) throws Exception {
-        deleteOldMessages();
+        deletesOldMessages();
         //int free = freeSlot();
         String trimmed = message.trim();
         if (trimmed.isEmpty()) {
@@ -150,18 +151,29 @@ public class Server implements BulletinBoardIntf {
      *
      * @throws ServerRuntimeException
      */
-    private void deleteOldMessages() throws ServerRuntimeException {
+    private void deletesOldMessages() throws ServerRuntimeException {
 
     }
 
     private static void init() {
-        System.out.println("\n|---------- Start Testing: ----------\n");
+        System.out.println("\n|---------- Listing all Methods: ----------\n");
+
+        System.out.println("------- getUser():\n" + getUser("INPUT"));
+        System.out.println("------- addUser():\n" + addUser("INPUT1", "INPUT2", "INPUT3"));
+        System.out.println("------- getMyMessages():\n" + getMyMessages("INPUT"));
+        System.out.println("------- publishMessage():\n" + publishMessage("INPUT1", "INPUT2", "INPUT3", "INPUT4"));
+        System.out.println("------- deleteOldMessages():\n" + deleteOldMessages("INPUT"));
+
+        System.out.println("---------- Methods listed. ----------|\n");
+
+        System.out.println("|---------- Start Testing: ----------\n");
 
         //System.out.println(deleteAll);
+        // deletes everything in TripleStore !!!
         //rdf.update(deleteAll);
 
         String query = addUser("Marylin", "RonMoe", "moe@mary.de");
-        System.out.println("------- addUser:\n" + query);
+        System.out.println("------- addUser():\n" + query);
         rdf.update(query);
 
         QueryExecution exec = rdf.query(getUser("moe@mary.de"));
@@ -174,10 +186,10 @@ public class Server implements BulletinBoardIntf {
         }
 
         query = publishMessage("VS", "Dit isn Test.", user, "all");
-        System.out.println("------- publishMessage:\n" + query);
+        System.out.println("------- publishMessage():\n" + query);
         rdf.update(query);
 
-        System.out.println("\n---------- Testing finished. ----------|\n");
+        System.out.println("---------- Testing finished. ----------|\n");
 
         System.out.println("|---------- Start querying Results: ----------\n");
 
