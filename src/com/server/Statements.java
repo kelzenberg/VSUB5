@@ -6,7 +6,7 @@ public class Statements {
 
     // \n character at the end is needed to stack commands
     public static final String prefixFOAF = "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\n";
-    public static final String prefixBB = "PREFIX bb: <http://omniskop.de/vs/bb/>\n";
+    public static final String prefixBB = "PREFIX bb: <https://omniskop.de/vs/bb/>\n";
     public static final String prefixDATA = "PREFIX data: <https://omniskop.de/blazegraph/data/>\n";
     public static final String prefixRDF = "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns>\n";
     public static final String prefixRDFS = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema>\n";
@@ -128,5 +128,9 @@ public class Statements {
                 + "FILTER ((NOW() - ?time) > ?10min)\n"
                 + "BIND ((\"2000-01-01T00:10:00.000Z\"^^xsd:dateTime) - (\"2000-01-01T00:00:00.000Z\"^^xsd:dateTime) as ?10min) }\n"
         );
+    }
+
+    public static String getMessageCount() {
+        return prefixAll + prefixRDF + "select ?s where {?s rdf:type bb:Message .}";
     }
 }

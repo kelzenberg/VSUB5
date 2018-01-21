@@ -123,8 +123,7 @@ public class Server implements BulletinBoardIntf {
      */
     @Override
     public int getMessageCount() throws Exception {
-        // TODO: get Message Count
-        return 0;
+        return query(Statements.getMessageCount()).size();
     }
 
     /**
@@ -223,5 +222,7 @@ public class Server implements BulletinBoardIntf {
         }
 
         System.out.println("\n---------- Querying Results finished. ----------|");
+
+        System.out.println("|---------- MessageCount: " + query(Statements.getMessageCount()).size() + " ----------\n");
     }
 }
