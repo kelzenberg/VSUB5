@@ -1,5 +1,7 @@
 package com.server;
 
+import java.util.UUID;
+
 public class Statements {
 
     // \n character at the end is needed to stack commands
@@ -41,11 +43,11 @@ public class Statements {
     public static String addUser(String firstName, String lastName, String email) {
         // TODO: prüfen, ob Email zu Nutzer existiert
         return prefixAll + String.format("INSERT DATA {\n"
-                        + "data:user rdf:type bb:User ;\n" // TODO: data:user'X' muss für X Zahl hochzählen
+                        + "data:user_%s rdf:type bb:User ;\n" // TODO: data:user'X' muss für X Zahl hochzählen
                         + "foaf:firstName \"%s\" ;\n"
                         + "foaf:lastName \"%s\" ;\n"
                         + "foaf:mbox \"%s\" . }\n",
-                firstName, lastName, email);
+                UUID.randomUUID(), firstName, lastName, email);
     }
 
     /**
@@ -103,14 +105,14 @@ public class Statements {
      */
     public static String publishMessage(String subject, String content, String creator, String recipient) {
         return prefixAll + String.format("INSERT {\n"
-                        + "data:message rdf:type bb:Message ;\n"
+                        + "data:message_%s rdf:type bb:Message ;\n"
                         + "bb:subject \"%s\" ;\n"
                         + "bb:content \"%s\" ;\n"
                         + "bb:creator \"%s\" ;\n" // TODO: creator bekommt String als Input oder nicht?
                         + "bb:timestamp ?time ;\n"
                         + "bb:recipient \"%s\" . }\n"
                         + "WHERE { BIND(NOW() as ?time) }\n",
-                subject, content, creator, recipient);
+                UUID.randomUUID(), subject, content, creator, recipient);
 
     }
 
