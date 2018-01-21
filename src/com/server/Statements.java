@@ -1,4 +1,4 @@
-package com;
+package com.server;
 
 public class Statements {
 

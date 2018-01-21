@@ -1,4 +1,4 @@
-package com;
+package com.server;
 
 import java.time.Instant;
 

@@ -14,7 +14,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-import static com.Statements.*;
+import static com.server.Statements.*;
 
 public class Server implements BulletinBoardIntf {
 
