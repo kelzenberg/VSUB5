@@ -19,7 +19,7 @@ public interface BulletinBoardIntf extends Remote {
      * @return String-Array with one Message object per slot
      * @throws Exception
      */
-    String[] getMessages(String email) throws Exception;
+    String[] getMessages(String email, String firstName, String lastName) throws Exception;
 
     /**
      * Gets a specific Message at the provided index of the Array

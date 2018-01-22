@@ -61,7 +61,7 @@ public class Statements {
         return prefixAll + String.format("SELECT ?content WHERE {\n"
                         + "?msgS bb:content ?content .\n"
                         + "?msgS bb:recipient ?receivers .\n"
-                        + "VALUES ?receivers { \"all\" \"%s\" } . }\n",
+                        + "VALUES ?receivers { \"all\" <%s> } . }\n",
                 email);
     }
 

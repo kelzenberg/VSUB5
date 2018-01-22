@@ -133,10 +133,24 @@ public class Server implements BulletinBoardIntf {
      * @throws Exception
      */
     @Override
-    public String[] getMessages(String email) throws Exception {
+    public String[] getMessages(String email, String firstName, String lastName) throws Exception {
         ArrayList<String> temp = new ArrayList<>();
-        for (QuerySolution x : query(getMessagesForUser(email))) {
-            temp.add(x.get("s").toString());
+
+        String authorURI = "";
+        while (authorURI.isEmpty()) {
+            ArrayList<QuerySolution> res = query(getUser(email));
+            if(res.size() == 0){
+                update(addUser(firstName, lastName, email));
+                System.out.printf("Added user: '%s %s, %s", firstName, lastName, email);
+            } else {
+                String s = res.get(0).get("s").toString();
+                authorURI = s;
+                System.out.println("Found authorURI: " + authorURI);
+            }
+        }
+
+        for (QuerySolution x : query(getMessagesForUser(authorURI))) {
+            temp.add(x.get("content").toString());
             // TODO: nur die Subjects returnen oder noch mehr?
         }
         String[] output = new String[temp.size()];
@@ -187,15 +201,14 @@ public class Server implements BulletinBoardIntf {
         }
         String authorURI = "";
         while (authorURI.isEmpty()) {
-            for (QuerySolution x : query(getUser(authorEmail))) {
-                String s = x.get("s").toString();
-                if (!s.isEmpty()) {
-                    authorURI = s;
-                    System.out.println("Found authorURI: " + authorURI);
-                } else {
-                    update(addUser(firstName, lastName, authorEmail));
-                    System.out.printf("Added user: '%s %s, %s", firstName, lastName, authorEmail);
-                }
+            ArrayList<QuerySolution> res = query(getUser(authorEmail));
+            if(res.size() == 0){
+                update(addUser(firstName, lastName, authorEmail));
+                System.out.printf("Added user: '%s %s, %s", firstName, lastName, authorEmail);
+            } else {
+                String s = res.get(0).get("s").toString();
+                authorURI = s;
+                System.out.println("Found authorURI: " + authorURI);
             }
         }
         update(publishMessage(subject, content, authorURI, recipient));
