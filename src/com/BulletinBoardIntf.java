@@ -37,5 +37,5 @@ public interface BulletinBoardIntf extends Remote {
      * @param msg
      * @throws Exception
      */
-    void putMessage(String message, String author) throws Exception;
+    void putMessage(String message, String author, String recipient, String subject) throws Exception;
 }
