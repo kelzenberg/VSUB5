@@ -161,13 +161,17 @@ public class Server implements BulletinBoardIntf {
      * Creates a new Message object with input message
      * and puts it into the next free slot on the BulletinBoard
      *
-     * @param message
-     * @param author
+     * @param firstName
+     * @param lastName
+     * @param authorEmail
+     * @param recipient
+     * @param subject
+     * @param content
      * @throws Exception
      */
     @Override
-    public void putMessage(String message, String author, String recipient, String subject) throws Exception {
-        String trimmed = message.trim();
+    public void putMessage(String firstName, String lastName, String authorEmail, String recipient, String subject, String content) throws Exception {
+        String trimmed = content.trim();
         if (trimmed.isEmpty()) {
             throw new InvalidMessageException("Provided Message is empty. Please send us Content.");
         }
@@ -175,7 +179,20 @@ public class Server implements BulletinBoardIntf {
             throw new InvalidMessageException("Provided Message is too long. Please restrict yourself to "
                     + maxLengthMessage + " Characters.");
         }
-        // TODO: put a new Message on the Board
+        String authorURI = "";
+        while (authorURI.isEmpty()) {
+            for (QuerySolution x : query(getUser(authorEmail))) {
+                String s = x.get("s").toString();
+                if (!s.isEmpty()) {
+                    authorURI = s;
+                    System.out.println("Found authorURI: " + authorURI);
+                } else {
+                    update(addUser(firstName, lastName, authorEmail));
+                    System.out.printf("Added user: '%s %s, %s", firstName, lastName, authorEmail);
+                }
+            }
+        }
+        update(publishMessage(subject, content, authorURI, recipient));
     }
 
     /**
@@ -202,7 +219,7 @@ public class Server implements BulletinBoardIntf {
         System.out.println("|---------- Start Testing: ----------|\n");
 
         // deletes everything in TripleStore !!!
-        //update(deleteAll);
+        update(deleteAll);
 
         update(addUser("Marylin", "RonMoe", "moe@mary.de"));
 
