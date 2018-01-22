@@ -34,7 +34,6 @@ public class Client {
             bb = (BulletinBoardIntf) registry.lookup(name);
 
 
-
             runCLI();
         } catch (ConnectException e) {
             System.out.println("Unable to connect to server.");
@@ -125,14 +124,22 @@ public class Client {
         }
     }
 
+    /**
+     * 
+     * @param userInput
+     */
     private static void managePost(String[] userInput) {
         System.out.println("Recipient: ");
-        String recipient = readline(clReader).trim();
+        String recipient = readline(clReader);
+        if (recipient != null) {
+            recipient = recipient.trim();
+        }
 
         System.out.println("Subject: ");
-        String subject = readline(clReader).trim();
-
-
+        String subject = readline(clReader);
+        if (subject != null) {
+            subject = subject.trim();
+        }
 
         System.out.println("Enter the message to post:");
         String msg = readline(clReader).trim();
@@ -214,9 +221,9 @@ public class Client {
      *
      * @param message
      */
-    private static void buildAndPostMessage(String recipient, String subject,String message) {
+    private static void buildAndPostMessage(String recipient, String subject, String message) {
         try {
-            bb.putMessage(userFirstName, userLastName, userMbox,  recipient,  subject,  message);
+            bb.putMessage(userFirstName, userLastName, userMbox, recipient, subject, message);
             System.out.println("Message posted!");
         } catch (InvalidMessageException e) {
             System.out.println("The server responded with an InvalidMessageException:");
