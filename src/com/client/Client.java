@@ -53,13 +53,22 @@ public class Client {
         String rawInput;
 
         System.out.println("Please enter your E-Mail address: ");
-        userMbox = readline(clReader).trim();
+        userMbox = readline(clReader);
+        if (userMbox != null) {
+            userMbox = userMbox.trim();
+        }
 
         System.out.println("Please enter your fist name: ");
-        userFirstName = readline(clReader).trim();
+        userFirstName = readline(clReader);
+        if (userFirstName != null) {
+            userFirstName = userFirstName.trim();
+        }
 
         System.out.println("Please enter your last name: ");
-        userLastName = readline(clReader).trim();
+        userLastName = readline(clReader);
+        if (userLastName != null) {
+            userLastName = userLastName.trim();
+        }
 
         String[] userInput;
         System.out.println("Type a command or 'help' for a list of all commands.");
@@ -127,6 +136,7 @@ public class Client {
     /**
      * Checks user input for recipient, subject & msg
      * and calls buildAndPostMessage()
+     *
      * @param userInput
      */
     private static void managePost(String[] userInput) {
