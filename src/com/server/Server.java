@@ -166,7 +166,7 @@ public class Server implements BulletinBoardIntf {
      * @throws Exception
      */
     @Override
-    public void putMessage(String message, String author) throws Exception {
+    public void putMessage(String message, String author, String recipient, String subject) throws Exception {
         String trimmed = message.trim();
         if (trimmed.isEmpty()) {
             throw new InvalidMessageException("Provided Message is empty. Please send us Content.");
