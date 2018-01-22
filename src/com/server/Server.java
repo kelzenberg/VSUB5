@@ -158,8 +158,8 @@ public class Server implements BulletinBoardIntf {
             return "No Message with this id.";
         } else {
             QuerySolution sol = (QuerySolution) response.get(0);
-            
-            return "Author: " + sol.get("creator") + "\nrecipient: " + sol.get("recipient") + "\nsubject: " + sol.get("subject") + "\ntimestamp: " + sol.get("timestamp") + "\nMessage content:\n" + sol.get("content") ;
+
+            return "Author: " + sol.get("creator") + "\nrecipient: " + sol.get("recipient") + "\nsubject: " + sol.get("subject") + "\ntimestamp: " + sol.get("timestamp") + "\nMessage content:\n" + sol.get("content");
         }
     }
 
@@ -211,6 +211,10 @@ public class Server implements BulletinBoardIntf {
         update(Statements.deleteOldMessages());
     }
 
+    /**
+     * Just deleting the TripleStore to have a fresh new Start
+     * And some testing...
+     */
     private static void init() {
         System.out.println("\n|---------- Listing all Methods: ----------|\n");
 

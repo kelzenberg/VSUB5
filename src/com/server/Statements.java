@@ -116,15 +116,20 @@ public class Statements {
 
     }
 
+    /**
+     * Gets a specific Message by its Id
+     * @param id
+     * @return
+     */
     public static String getMessageById(String id) {
         return prefixAll + String.format("select ?creator ?recipient ?subject ?timestamp ?content where {\n"
-            + "data:message_%s bb:creator ?creator . \n"
-            + "data:message_%s bb:recipient ?recipient . \n"
-            + "data:message_%s bb:subject ?subject . \n"
-            + "data:message_%s bb:timestamp ?timestamp .\n" 
-            + "data:message_%s bb:content ?content . \n"
-       +"}",
-       id, id, id, id, id);
+                        + "data:message_%s bb:creator ?creator . \n"
+                        + "data:message_%s bb:recipient ?recipient . \n"
+                        + "data:message_%s bb:subject ?subject . \n"
+                        + "data:message_%s bb:timestamp ?timestamp .\n"
+                        + "data:message_%s bb:content ?content . \n"
+                        + "}",
+                id, id, id, id, id);
 
     }
 
@@ -142,6 +147,10 @@ public class Statements {
         );
     }
 
+    /**
+     * Gets the total Message Count on the TripleStore
+     * @return String that can be queried and/or update in SPARQL
+     */
     public static String getMessageCount() {
         return prefixAll + prefixRDF + "select ?s where {?s rdf:type bb:Message .}";
     }
