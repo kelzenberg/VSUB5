@@ -184,8 +184,6 @@ public class Client {
 
     /**
      * Prints all the Messages of the BulletinBoard to the Console
-     *
-     * @param bb BulletinBoard
      */
     private static void printAllMessages() {
         try {
