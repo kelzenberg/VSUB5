@@ -185,7 +185,7 @@ public class Server implements BulletinBoardIntf {
      * @throws ServerRuntimeException
      */
     private void deletesOldMessages() throws ServerRuntimeException {
-        // TODO: delete old Message after Timeout (still needed?)
+        update(Statements.deleteOldMessages());
     }
 
     private static void init() {
