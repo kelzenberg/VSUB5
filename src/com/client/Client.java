@@ -16,6 +16,9 @@ public class Client {
 
     private static BulletinBoardIntf bb;
     private static BufferedReader clReader;
+    private static String userMbox;
+    private static String userFirstName;
+    private static String userLastName;
 
     /**
      * Runs the Client
@@ -29,6 +32,9 @@ public class Client {
             Registry registry = LocateRegistry.getRegistry("localhost");
             // get the name of the rmi entry
             bb = (BulletinBoardIntf) registry.lookup(name);
+
+
+
             runCLI();
         } catch (ConnectException e) {
             System.out.println("Unable to connect to server.");
@@ -46,6 +52,16 @@ public class Client {
     private static void runCLI() {
         clReader = new BufferedReader(new InputStreamReader(System.in));
         String rawInput;
+
+        System.out.println("Please enter your E-Mail address: ");
+        userMbox = readline(clReader).trim();
+
+        System.out.println("Please enter your fist name: ");
+        userFirstName = readline(clReader).trim();
+
+        System.out.println("Please enter your last name: ");
+        userLastName = readline(clReader).trim();
+
         String[] userInput;
         System.out.println("Type a command or 'help' for a list of all commands.");
         while (true) {
@@ -85,21 +101,11 @@ public class Client {
         switch (userInput[0]) {
             case "help": // prints help information
                 System.out.println("Choose a command: ");
-                System.out.println("help | post [message] | count | read | read [index] | exit");
+                System.out.println("help | post | count | read | read [index] | exit");
                 break;
             case "post": // posts a message
-                if (userInput.length > 1) { // The user wrote the message directly after the post command
-                    String[] msg = Arrays.copyOfRange(userInput, 1, userInput.length);
-                    buildAndPostMessage(msg);
-                } else { // Enter post mode where the user can enter the message.
-                    System.out.println("Enter the message to post:");
-                    String msg = readline(clReader).trim();
-                    if (msg.length() == 0) {
-                        System.out.println("Message was not send because it's empty, bruh.");
-                    } else {
-                        buildAndPostMessage(msg);
-                    }
-                }
+                // Enter post mode where the user can enter the message.
+                managePost(userInput);
                 break;
             case "count": // returns the number of messages on the BulletinBoard
                 printMessageCount();
@@ -108,16 +114,7 @@ public class Client {
                 if (userInput.length == 1) {
                     printAllMessages();
                 } else {
-                    int index;
-                    for (int i = 1; i < userInput.length; i++) {
-                        try {
-                            index = Integer.parseInt(userInput[i]);
-                        } catch (NumberFormatException e) {
-                            System.out.println(userInput[i] + " is not a number");
-                            continue;
-                        }
-                        printMessage(index);
-                    }
+                    printMessage(userInput[1]);
                 }
                 break;
             case "exit": // exits the client
@@ -128,12 +125,30 @@ public class Client {
         }
     }
 
+    private static void managePost(String[] userInput) {
+        System.out.println("Recipient: ");
+        String recipient = readline(clReader).trim();
+
+        System.out.println("Subject: ");
+        String subject = readline(clReader).trim();
+
+
+
+        System.out.println("Enter the message to post:");
+        String msg = readline(clReader).trim();
+        if (msg.length() == 0) {
+            System.out.println("Message was not send because it's empty, bruh.");
+        } else {
+            buildAndPostMessage(recipient, subject, msg);
+        }
+    }
+
     /**
      * Prints the message with the index provided by the user input
      *
      * @param index of message on BulletinBoard
      */
-    private static void printMessage(int index) {
+    private static void printMessage(String index) {
         try {
             String messages = bb.getMessage(index);
             System.out.println("=> Message " + index + ": ");
@@ -195,23 +210,13 @@ public class Client {
     }
 
     /**
-     * Builds the Message from the User input and sends it to the Server
-     *
-     * @param wordList
-     */
-    private static void buildAndPostMessage(String[] wordList) {
-        String message = String.join(" ", wordList);
-        buildAndPostMessage(message);
-    }
-
-    /**
      * Sends the Message to the Server
      *
      * @param message
      */
-    private static void buildAndPostMessage(String message) {
+    private static void buildAndPostMessage(String recipient, String subject,String message) {
         try {
-            bb.putMessage(message, "Tester");
+            bb.putMessage(userFirstName, userLastName, userMbox,  recipient,  subject,  message);
             System.out.println("Message posted!");
         } catch (InvalidMessageException e) {
             System.out.println("The server responded with an InvalidMessageException:");

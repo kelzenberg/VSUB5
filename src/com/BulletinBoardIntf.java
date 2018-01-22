@@ -28,7 +28,7 @@ public interface BulletinBoardIntf extends Remote {
      * @return String of the Message object at index
      * @throws Exception
      */
-    String getMessage(int index) throws Exception;
+    String getMessage(String index) throws Exception;
 
     /**
      * Creates a new Message object with input message

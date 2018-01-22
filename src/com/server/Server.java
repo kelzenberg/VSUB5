@@ -152,9 +152,15 @@ public class Server implements BulletinBoardIntf {
      * @throws Exception
      */
     @Override
-    public String getMessage(int index) throws Exception {
-        // TODO: get specific Message with ID/Index
-        return "";
+    public String getMessage(String index) throws Exception {
+        ArrayList<QuerySolution> response = query(getMessageById(index));
+        if (response.size() == 0) {
+            return "No Message with this id.";
+        } else {
+            QuerySolution sol = (QuerySolution) response.get(0);
+            
+            return "Author: " + sol.get("creator") + "\nrecipient: " + sol.get("recipient") + "\nsubject: " + sol.get("subject") + "\ntimestamp: " + sol.get("timestamp") + "\nMessage content:\n" + sol.get("content") ;
+        }
     }
 
     /**
