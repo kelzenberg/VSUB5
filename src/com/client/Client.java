@@ -125,7 +125,8 @@ public class Client {
     }
 
     /**
-     * 
+     * Checks user input for recipient, subject & msg
+     * and calls buildAndPostMessage()
      * @param userInput
      */
     private static void managePost(String[] userInput) {
@@ -142,11 +143,14 @@ public class Client {
         }
 
         System.out.println("Enter the message to post:");
-        String msg = readline(clReader).trim();
-        if (msg.length() == 0) {
-            System.out.println("Message was not send because it's empty, bruh.");
-        } else {
-            buildAndPostMessage(recipient, subject, msg);
+        String msg = readline(clReader);
+        if (msg != null) {
+            msg = msg.trim();
+            if (msg.length() == 0) {
+                System.out.println("Message was not send because it's empty, bruh.");
+            } else {
+                buildAndPostMessage(recipient, subject, msg);
+            }
         }
     }
 
