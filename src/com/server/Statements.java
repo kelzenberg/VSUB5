@@ -18,7 +18,7 @@ public class Statements {
     // gets everything in TripleStore
     public static final String queryAll = "SELECT * { ?s ?p ?o }\n";
     // deletes everything in TripleStore
-    public static final String deleteAll = "DELETE where { ?s ?o ?p }\n";
+    public static final String deleteAll = "DELETE where { ?s ?p ?o }\n";
 
     /**
      * Gets the user with @param email
